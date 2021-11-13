@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using Wax.Imports;
+using Wax.Imports.Data;
 
 namespace Wax.WaxExample {
     class WaxExample {
@@ -13,6 +14,9 @@ namespace Wax.WaxExample {
         static void Main(string[] args) {
             var engine = __wasm.engine_new();
             var store = __wasm.store_new(engine);
+
+            byte_vec_t bv = default;
+            __wasm.byte_vec_new_uninitialized(ref bv, 10);
         }
     }
 }

@@ -4,12 +4,13 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>preview</LangVersion>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <StartupObject>Wax.WaxExample.WaxExample</StartupObject>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <!-- Try to do away with this ASAP and keep it in the library -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Wax\Wax.csproj" />
-    <PackageReference Include="System.Memory" Version="4.5.1" />
   </ItemGroup>
   <ItemGroup>
     <None Update="wasmer.dll">

@@ -29,33 +29,99 @@ namespace Wax.WaxExample {
             byte_vec_t wasm_bytes = default;
             __wasmer.wat2wasm(ref wat, ref wasm_bytes);
 
-
+            Console.WriteLine("Creating the store...");
             var engine = __wasm.engine_new();
             var store = __wasm.store_new(engine);
+
+            Console.WriteLine("Compiling module...");
             var module = __wasm.module_new(store, ref wasm_bytes);
             if (module == null) {
+                Console.Error.WriteLine("> Error compiling module!");
                 print_wasmer_error();
                 Environment.Exit(1);
             }
 
-            extern_vec_t imports = new extern_vec_t { size = 0, data = IntPtr.Zero };
+            __wasm.byte_vec_delete(ref wat);
+
+            Console.WriteLine("Creating imports...");
+            extern_vec_t imports = new extern_vec_t();
+
+            Console.WriteLine("Instantiating module...");
             var instance = __wasm.instance_new(store, module, ref imports, IntPtr.Zero);
-
-            // Pick work back up here
-
-
-            // Delete this in next commit, just leaving it here for one commit for posterity, to be moved into a unit test or something later
-            {
-                byte_vec_t bv = default;
-                __wasm.byte_vec_new_uninitialized(ref bv, 10);
-                byte_vec_t bv2 = default;
-                byte_vec_t bv3 = default;
-                __wasm.byte_vec_copy(ref bv2, ref bv);
-                __wasm.byte_vec_delete(ref bv);
-                __wasm.byte_vec_copy(ref bv3, ref bv2);
-                __wasm.byte_vec_delete(ref bv3);
-                __wasm.byte_vec_delete(ref bv2);
+            if (instance == null) {
+                Console.Error.WriteLine("> Error instantiating module!");
+                print_wasmer_error();
+                Environment.Exit(1);
             }
+
+            Console.WriteLine("Retrieving exports...");
+            extern_vec_t exports = new extern_vec_t();
+            __wasm.instance_exports(instance, ref exports);
+            if (exports.size == 0) {
+                Console.Error.WriteLine("> Error accessing exports!");
+                print_wasmer_error();
+                Environment.Exit(1);
+            }
+
+            // TODO: REMOVE
+            Console.WriteLine("y u no work debugger (console sanity check)");
+
+            // XXX FIXME: this isn't working
+            //  wasm_func_t* wasm_extern_as_func(wasm_extern_t*)
+            // https://docs.wasmtime.dev/c-api/wasm_8h.html#a7ad89a676aa4971e0d639faf29f31ec5
+            var add_one_func = __wasm.extern_as_func(exports.data); // <-- specifically this
+            if (add_one_func == IntPtr.Zero) {
+                Console.Error.WriteLine("> Error accessing export!");
+                print_wasmer_error();
+                Environment.Exit(1);
+            }
+
+            __wasm.module_delete(module);
+            __wasm.instance_delete(instance);
+
+            // TODO: Untested from here on down, until exports.data issue is addressed
+
+            Console.WriteLine("Calling `add_one` function...");
+            // wasm_val_t args_val[1] = { WASM_I32_VAL(1) };
+            Span<val_t> args_val = stackalloc val_t[1] {
+                new val_t { kind = (byte)valkind_t.I32, of = { i32 = 1 } },
+            };
+            // wasm_val_t results_val[1] = { WASM_INIT_VAL };
+            Span<val_t> results_val = stackalloc val_t[1] {
+                new val_t { kind = (byte)valkind_t.ANYREF, of = { @ref = IntPtr.Zero } },
+            };
+
+            // QUESTION: Is this the best way? This strikes me as possibly non-ideal.
+            // wasm_val_vec_t args = WASM_ARRAY_VEC(args_val);
+            val_vec_t args_vec = default;
+            args_vec.size = (ulong)args_val.Length;
+            unsafe {
+                fixed (void* arg0 = &args_val[0]) {
+                    args_vec.data = (IntPtr)arg0;
+                }
+            }
+
+            // QUESTION: Same as above
+            // wasm_val_vec_t results = WASM_ARRAY_VEC(results_val);
+            val_vec_t results_vec = default;
+            results_vec.size = (ulong)results_val.Length;
+            unsafe {
+                fixed (void* result0 = &results_val[0]) {
+                    results_vec.data = (IntPtr)result0;
+                }
+            }
+
+            if (__wasm.func_call(add_one_func, ref args_vec, ref results_vec) != IntPtr.Zero) {
+                Console.Error.WriteLine("> Error calling function!");
+                print_wasmer_error();
+                Environment.Exit(1);
+            }
+
+            __wasm.extern_vec_delete(ref exports);
+            __wasm.store_delete(store);
+            __wasm.engine_delete(engine);
+
+            Console.WriteLine("y u no work debugger (console sanity check)");
         }
     }
 }

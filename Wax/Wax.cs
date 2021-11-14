@@ -231,7 +231,7 @@ namespace Wax {
 
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_tabletype_limits", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern IntPtr tabletype_limits(IntPtr tabletype);
+            internal static unsafe extern limits_t* tabletype_limits(IntPtr tabletype);
 
             [NotYetTested]
             #region new, copy, delete
@@ -271,7 +271,7 @@ namespace Wax {
             #region Memorytype
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_memorytype_limits", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern IntPtr memorytype_limits(IntPtr memorytype);
+            internal static unsafe extern limits_t* memorytype_limits(IntPtr memorytype);
 
             #region new, copy, delete
             [NotYetTested]

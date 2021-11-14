@@ -78,6 +78,55 @@ namespace Wax {
             [SuppressUnmanagedCodeSecurity, DllImport("wasmer", EntryPoint = "wasm_store_delete", CallingConvention = CallingConvention.Cdecl)]
             internal static extern void store_delete(IntPtr store);
             #endregion
+            #region Valtype
+            [NotYetTested]
+            [SuppressUnmanagedCodeSecurity, DllImport("wasmer", EntryPoint = "wasm_valtype_copy", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr valtype_copy(IntPtr _0);
+
+            [NotYetTested]
+            [SuppressUnmanagedCodeSecurity, DllImport("wasmer", EntryPoint = "wasm_valtype_new", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr valtype_new(byte _0);
+
+            [NotYetTested]
+            [SuppressUnmanagedCodeSecurity, DllImport("wasmer", EntryPoint = "wasm_valtype_kind", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern byte valtype_kind(IntPtr _0);
+
+            [NotYetTested]
+            [SuppressUnmanagedCodeSecurity, DllImport("wasmer", EntryPoint = "wasm_valtype_delete", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void valtype_delete(IntPtr _0);
+
+            [NotYetTested]
+            [SuppressUnmanagedCodeSecurity, DllImport("wasmer", EntryPoint = "wasm_valtype_vec_new", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void valtype_vec_new(ref vec_t/*wasm_valtype_vec_t*/ vec, ulong length, ref byte buffer);
+
+            [NotYetTested]
+            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static bool valkind_is_num(valkind_t k) {
+                return k < valkind_t.ANYREF;
+            }
+
+            [NotYetTested]
+            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static bool valkind_is_ref(valkind_t k) {
+                return k >= valkind_t.ANYREF;
+            }
+
+            [NotYetTested]
+            [SuppressUnmanagedCodeSecurity, DllImport("wasmer", EntryPoint = "wasm_valtype_vec_new_empty", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void valtype_vec_new_empty(ref vec_t/*wasm_valtype_vec_t*/ vec);
+
+            [NotYetTested]
+            [SuppressUnmanagedCodeSecurity, DllImport("wasmer", EntryPoint = "wasm_valtype_vec_new_uninitialized", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void valtype_vec_new_uninitialized(ref vec_t/*wasm_valtype_vec_t*/ vec, ulong capacity);
+
+            [NotYetTested]
+            [SuppressUnmanagedCodeSecurity, DllImport("wasmer", EntryPoint = "wasm_valtype_vec_copy", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void valtype_vec_copy(ref vec_t/*wasm_valtype_vec_t*/ vec, ref vec_t/*wasm_valtype_vec_t*/ vec2);
+
+            [NotYetTested]
+            [SuppressUnmanagedCodeSecurity, DllImport("wasmer", EntryPoint = "wasm_valtype_vec_delete", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void valtype_vec_delete(ref vec_t/*wasm_valtype_vec_t*/ vec);
+            #endregion
             #region Module
             [SuppressUnmanagedCodeSecurity, DllImport("wasmer", EntryPoint = "wasm_module_new", CallingConvention = CallingConvention.Cdecl)]
             internal static extern IntPtr module_new(IntPtr store, ref vec_t/*wasm_byte_vec_t*/ bytes);

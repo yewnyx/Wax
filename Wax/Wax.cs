@@ -12,6 +12,11 @@ namespace Wax {
         class NotYetTestedAttribute : Attribute { }
 
         namespace Data {
+            public enum mutability_t {
+                CONST = 0,
+                VAR = 1,
+            };
+
             public enum valkind_t {
                 I32 = 0,
                 I64 = 1,
@@ -26,6 +31,14 @@ namespace Wax {
                 GLOBAL = 1,
                 TABLE = 2,
                 MEMORY = 3
+            }
+
+            [StructLayout(LayoutKind.Sequential, Size = 8)]
+            public struct limits_t {
+                public uint min;
+                public uint max;
+
+                public const uint max_default = 0xffffffff;
             }
 
             [StructLayout(LayoutKind.Sequential, Size = 16)]
@@ -166,6 +179,133 @@ namespace Wax {
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_functype_vec_delete", CallingConvention = CallingConvention.Cdecl)]
             internal static extern void functype_vec_delete(ref vec_t/* functype_vec_t */ vec);
+            #endregion
+            #endregion
+            #region Globaltype
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_globaltype_content", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr globaltype_content(IntPtr globaltype);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_globaltype_mutability", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern byte globaltype_mutability(IntPtr globaltype);
+            #region new, copy, delete
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_globaltype_new", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr globaltype_new(IntPtr valtype, byte mutability);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_globaltype_copy", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr globaltype_copy(IntPtr globaltype);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_globaltype_delete", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void globaltype_delete(IntPtr globaltype);
+            #endregion
+            #region vec_{new,new_empty,new_uninitialized,copy,delete}
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_globaltype_vec_new", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void globaltype_vec_new(ref vec_t/* globaltype_vec_t */ vec, ulong length, ref /* globaltype_t* */IntPtr array);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_globaltype_vec_new_empty", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void globaltype_vec_new_empty(ref vec_t/* globaltype_vec_t */ vec);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_globaltype_vec_new_uninitialized", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void globaltype_vec_new_uninitialized(ref vec_t/* globaltype_vec_t */ vec, ulong capacity);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_globaltype_vec_copy", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void globaltype_vec_copy(ref vec_t/* globaltype_vec_t */ vec, ref vec_t/* globaltype_vec_t */ vec2);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_globaltype_vec_delete", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void globaltype_vec_delete(ref vec_t/* globaltype_vec_t */ vec);
+            #endregion
+            #endregion
+            #region Tabletype
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_tabletype_element", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr tabletype_element(IntPtr tabletype);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_tabletype_limits", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr tabletype_limits(IntPtr tabletype);
+
+            [NotYetTested]
+            #region new, copy, delete
+            [DllImport("wasmer", EntryPoint = "wasm_tabletype_new", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr tabletype_new(IntPtr valtype, ref limits_t limits);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_tabletype_copy", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr tabletype_copy(IntPtr tabletype);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_tabletype_delete", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void tabletype_delete(IntPtr tabletype);
+            #endregion
+            #region vec_{new,new_empty,new_uninitialized,copy,delete}
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_tabletype_vec_new", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void tabletype_vec_new(ref vec_t/* tabletype_vec_t */ vec, ulong length, ref /* tabletype_t* */IntPtr array);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_tabletype_vec_new_empty", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void tabletype_vec_new_empty(ref vec_t/* tabletype_vec_t */ vec);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_tabletype_vec_new_uninitialized", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void tabletype_vec_new_uninitialized(ref vec_t/* tabletype_vec_t */ vec, ulong capacity);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_tabletype_vec_copy", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void tabletype_vec_copy(ref vec_t/* tabletype_vec_t */ vec, ref vec_t/* tabletype_vec_t */ vec2);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_tabletype_vec_delete", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void tabletype_vec_delete(ref vec_t/* tabletype_vec_t */ vec);
+            #endregion
+            #endregion
+            #region Memorytype
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_memorytype_limits", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr memorytype_limits(IntPtr memorytype);
+
+            #region new, copy, delete
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_memorytype_new", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr memorytype_new(ref limits_t limits);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_memorytype_copy", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr memorytype_copy(IntPtr memorytype);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_memorytype_delete", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void memorytype_delete(IntPtr memorytype);
+            #endregion
+            #region vec_{new,new_empty,new_uninitialized,copy,delete}
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_memorytype_vec_new", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void memorytype_vec_new(ref vec_t/* memorytype_vec_t */ vec, ulong length, ref /* memorytype_t* */IntPtr array);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_memorytype_vec_new_empty", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void memorytype_vec_new_empty(ref vec_t/* memorytype_vec_t */ vec);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_memorytype_vec_new_uninitialized", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void memorytype_vec_new_uninitialized(ref vec_t/* memorytype_vec_t */ vec, ulong capacity);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_memorytype_vec_copy", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void memorytype_vec_copy(ref vec_t/* memorytype_vec_t */ vec, ref vec_t/* memorytype_vec_t */ vec2);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_memorytype_vec_delete", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void memorytype_vec_delete(ref vec_t/* memorytype_vec_t */ vec);
             #endregion
             #endregion
             #region Module
@@ -482,7 +622,8 @@ namespace Wax {
             [DllImport("wasmer", EntryPoint = "wasm_func_call", CallingConvention = CallingConvention.Cdecl)]
             internal static extern IntPtr func_call(IntPtr func, ref vec_t/* val_vec_t*/ vec, ref vec_t/* val_vec_t */ results);
 
-            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             internal static IntPtr/* functype_t* */ functype_new_0_0() {
                 vec_t/* valtype_vec_t*/ @params = default;
                 valtype_vec_new_empty(ref @params);
@@ -493,7 +634,8 @@ namespace Wax {
                 return functype_new(ref @params, ref results);
             }
 
-            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             internal static IntPtr/* functype_t* */ functype_new_1_0(
               ref /* own valtype_t* */IntPtr p) {
                 Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[1] { p };
@@ -507,7 +649,8 @@ namespace Wax {
                 return functype_new(ref @params, ref results);
             }
 
-            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             internal static IntPtr/* functype_t* */ functype_new_2_0(
               ref /* own valtype_t* */IntPtr p1,
               ref /* own valtype_t* */IntPtr p2) {
@@ -522,7 +665,8 @@ namespace Wax {
                 return functype_new(ref @params, ref results);
             }
 
-            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             internal static IntPtr/* functype_t* */ functype_new_3_0(
               ref /* own valtype_t* */IntPtr p1,
               ref /* own valtype_t* */IntPtr p2,
@@ -538,7 +682,8 @@ namespace Wax {
                 return functype_new(ref @params, ref results);
             }
 
-            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             internal static IntPtr/* functype_t* */ functype_new_0_1(
               ref /* own valtype_t* */IntPtr r
             ) {
@@ -553,7 +698,8 @@ namespace Wax {
                 return functype_new(ref @params, ref results);
             }
 
-            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             internal static IntPtr/* functype_t* */ functype_new_1_1(
               ref /* own valtype_t* */IntPtr p,
               ref /* own valtype_t* */IntPtr r) {
@@ -569,7 +715,8 @@ namespace Wax {
                 return functype_new(ref @params, ref results);
             }
 
-            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             internal static IntPtr/* functype_t* */ functype_new_2_1(
                 ref /* own valtype_t* */IntPtr p1,
                 ref /* own valtype_t* */IntPtr p2,
@@ -586,7 +733,8 @@ namespace Wax {
                 return functype_new(ref @params, ref results);
             }
 
-            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             internal static IntPtr/* functype_t* */ functype_new_3_1(
               ref /* own valtype_t* */IntPtr p1,
               ref /* own valtype_t* */IntPtr p2,
@@ -604,10 +752,11 @@ namespace Wax {
                 return functype_new(ref @params, ref results);
             }
 
-            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             internal static IntPtr/* functype_t* */ functype_new_0_2(
-              ref /* own valtype_t* */IntPtr r1, ref /* own valtype_t* */IntPtr r2
-            ) {
+              ref /* own valtype_t* */IntPtr r1,
+              ref /* own valtype_t* */IntPtr r2) {
                 Span</* valtype_t* */IntPtr> rs = stackalloc IntPtr[2] { r1, r2 };
 
                 vec_t/* valtype_vec_t*/ @params = default;
@@ -620,7 +769,8 @@ namespace Wax {
 
             }
 
-            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             internal static IntPtr/* functype_t* */ functype_new_1_2(
               ref /* own valtype_t* */IntPtr p,
               ref /* own valtype_t* */IntPtr r1,
@@ -637,7 +787,8 @@ namespace Wax {
                 return functype_new(ref @params, ref results);
             }
 
-            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             internal static IntPtr/* functype_t* */ functype_new_2_2(
               ref /* own valtype_t* */IntPtr p1,
               ref /* own valtype_t* */IntPtr p2,
@@ -655,7 +806,8 @@ namespace Wax {
                 return functype_new(ref @params, ref results);
             }
 
-            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             internal static IntPtr/* functype_t* */ functype_new_3_2(
               ref /* own valtype_t* */IntPtr p1,
               ref /* own valtype_t* */IntPtr p2,

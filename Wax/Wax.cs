@@ -483,12 +483,187 @@ namespace Wax {
             internal static extern IntPtr func_call(IntPtr func, ref vec_t/* val_vec_t*/ vec, ref vec_t/* val_vec_t */ results);
 
             [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
-            internal static IntPtr/*functype_t* */ functype_new_2_1(
-                ref /*own valtype_t* */IntPtr p1,
-                ref /*own valtype_t* */IntPtr p2,
-                ref /*own valtype_t* */IntPtr r) {
-                Span</*valtype_t* */IntPtr> ps = stackalloc IntPtr[2] { p1, p2 };
-                Span</*valtype_t* */IntPtr> rs = stackalloc IntPtr[1] { r };
+            internal static IntPtr/* functype_t* */ functype_new_0_0() {
+                vec_t/* valtype_vec_t*/ @params = default;
+                valtype_vec_new_empty(ref @params);
+
+                vec_t/* valtype_vec_t*/ results = default;
+                valtype_vec_new_empty(ref results);
+
+                return functype_new(ref @params, ref results);
+            }
+
+            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static IntPtr/* functype_t* */ functype_new_1_0(
+              ref /* own valtype_t* */IntPtr p) {
+                Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[1] { p };
+
+                vec_t/* valtype_vec_t*/ @params = default;
+                valtype_vec_new(ref @params, (ulong)ps.Length, ref MemoryMarshal.GetReference(ps));
+
+                vec_t/* valtype_vec_t*/ results = default;
+                valtype_vec_new_empty(ref results);
+
+                return functype_new(ref @params, ref results);
+            }
+
+            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static IntPtr/* functype_t* */ functype_new_2_0(
+              ref /* own valtype_t* */IntPtr p1,
+              ref /* own valtype_t* */IntPtr p2) {
+                Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[2] { p1, p2 };
+
+                vec_t/* valtype_vec_t*/ @params = default;
+                valtype_vec_new(ref @params, (ulong)ps.Length, ref MemoryMarshal.GetReference(ps));
+
+                vec_t/* valtype_vec_t*/ results = default;
+                valtype_vec_new_empty(ref results);
+
+                return functype_new(ref @params, ref results);
+            }
+
+            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static IntPtr/* functype_t* */ functype_new_3_0(
+              ref /* own valtype_t* */IntPtr p1,
+              ref /* own valtype_t* */IntPtr p2,
+              ref /* own valtype_t* */IntPtr p3) {
+                Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[3] { p1, p2, p3 };
+
+                vec_t/* valtype_vec_t*/ @params = default;
+                valtype_vec_new(ref @params, (ulong)ps.Length, ref MemoryMarshal.GetReference(ps));
+
+                vec_t/* valtype_vec_t*/ results = default;
+                valtype_vec_new_empty(ref results);
+
+                return functype_new(ref @params, ref results);
+            }
+
+            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static IntPtr/* functype_t* */ functype_new_0_1(
+              ref /* own valtype_t* */IntPtr r
+            ) {
+                Span</* valtype_t* */IntPtr> rs = stackalloc IntPtr[1] { r };
+
+                vec_t/* valtype_vec_t*/ @params = default;
+                valtype_vec_new_empty(ref @params);
+
+                vec_t/* valtype_vec_t*/ results = default;
+                valtype_vec_new(ref results, (ulong)rs.Length, ref MemoryMarshal.GetReference(rs));
+
+                return functype_new(ref @params, ref results);
+            }
+
+            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static IntPtr/* functype_t* */ functype_new_1_1(
+              ref /* own valtype_t* */IntPtr p,
+              ref /* own valtype_t* */IntPtr r) {
+                Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[1] { p };
+                Span</* valtype_t* */IntPtr> rs = stackalloc IntPtr[1] { r };
+
+                vec_t/* valtype_vec_t*/ @params = default;
+                valtype_vec_new(ref @params, (ulong)ps.Length, ref MemoryMarshal.GetReference(ps));
+
+                vec_t/* valtype_vec_t*/ results = default;
+                valtype_vec_new(ref results, (ulong)rs.Length, ref MemoryMarshal.GetReference(rs));
+
+                return functype_new(ref @params, ref results);
+            }
+
+            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static IntPtr/* functype_t* */ functype_new_2_1(
+                ref /* own valtype_t* */IntPtr p1,
+                ref /* own valtype_t* */IntPtr p2,
+                ref /* own valtype_t* */IntPtr r) {
+                Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[2] { p1, p2 };
+                Span</* valtype_t* */IntPtr> rs = stackalloc IntPtr[1] { r };
+
+                vec_t/* valtype_vec_t*/ @params = default;
+                valtype_vec_new(ref @params, (ulong)ps.Length, ref MemoryMarshal.GetReference(ps));
+
+                vec_t/* valtype_vec_t*/ results = default;
+                valtype_vec_new(ref results, (ulong)rs.Length, ref MemoryMarshal.GetReference(rs));
+
+                return functype_new(ref @params, ref results);
+            }
+
+            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static IntPtr/* functype_t* */ functype_new_3_1(
+              ref /* own valtype_t* */IntPtr p1,
+              ref /* own valtype_t* */IntPtr p2,
+              ref /* own valtype_t* */IntPtr p3,
+              ref /* own valtype_t* */IntPtr r) {
+                Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[3] { p1, p2, p3 };
+                Span</* valtype_t* */IntPtr> rs = stackalloc IntPtr[1] { r };
+
+                vec_t/* valtype_vec_t*/ @params = default;
+                valtype_vec_new(ref @params, (ulong)ps.Length, ref MemoryMarshal.GetReference(ps));
+
+                vec_t/* valtype_vec_t*/ results = default;
+                valtype_vec_new(ref results, (ulong)rs.Length, ref MemoryMarshal.GetReference(rs));
+
+                return functype_new(ref @params, ref results);
+            }
+
+            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static IntPtr/* functype_t* */ functype_new_0_2(
+              ref /* own valtype_t* */IntPtr r1, ref /* own valtype_t* */IntPtr r2
+            ) {
+                Span</* valtype_t* */IntPtr> rs = stackalloc IntPtr[2] { r1, r2 };
+
+                vec_t/* valtype_vec_t*/ @params = default;
+                valtype_vec_new_empty(ref @params);
+
+                vec_t/* valtype_vec_t*/ results = default;
+                valtype_vec_new(ref results, (ulong)rs.Length, ref MemoryMarshal.GetReference(rs));
+
+                return functype_new(ref @params, ref results);
+
+            }
+
+            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static IntPtr/* functype_t* */ functype_new_1_2(
+              ref /* own valtype_t* */IntPtr p,
+              ref /* own valtype_t* */IntPtr r1,
+              ref /* own valtype_t* */IntPtr r2) {
+                Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[1] { p };
+                Span</* valtype_t* */IntPtr> rs = stackalloc IntPtr[2] { r1, r2 };
+
+                vec_t/* valtype_vec_t*/ @params = default;
+                valtype_vec_new(ref @params, (ulong)ps.Length, ref MemoryMarshal.GetReference(ps));
+
+                vec_t/* valtype_vec_t*/ results = default;
+                valtype_vec_new(ref results, (ulong)rs.Length, ref MemoryMarshal.GetReference(rs));
+
+                return functype_new(ref @params, ref results);
+            }
+
+            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static IntPtr/* functype_t* */ functype_new_2_2(
+              ref /* own valtype_t* */IntPtr p1,
+              ref /* own valtype_t* */IntPtr p2,
+              ref /* own valtype_t* */IntPtr r1,
+              ref /* own valtype_t* */IntPtr r2) {
+                Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[2] { p1, p2 };
+                Span</* valtype_t* */IntPtr> rs = stackalloc IntPtr[2] { r1, r2 };
+
+                vec_t/* valtype_vec_t*/ @params = default;
+                valtype_vec_new(ref @params, (ulong)ps.Length, ref MemoryMarshal.GetReference(ps));
+
+                vec_t/* valtype_vec_t*/ results = default;
+                valtype_vec_new(ref results, (ulong)rs.Length, ref MemoryMarshal.GetReference(rs));
+
+                return functype_new(ref @params, ref results);
+            }
+
+            [SuppressUnmanagedCodeSecurity, MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static IntPtr/* functype_t* */ functype_new_3_2(
+              ref /* own valtype_t* */IntPtr p1,
+              ref /* own valtype_t* */IntPtr p2,
+              ref /* own valtype_t* */IntPtr p3,
+              ref /* own valtype_t* */IntPtr r1,
+              ref /* own valtype_t* */IntPtr r2) {
+                Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[3] { p1, p2, p3 };
+                Span</* valtype_t* */IntPtr> rs = stackalloc IntPtr[2] { r1, r2 };
 
                 vec_t/* valtype_vec_t*/ @params = default;
                 valtype_vec_new(ref @params, (ulong)ps.Length, ref MemoryMarshal.GetReference(ps));

@@ -36,7 +36,7 @@ namespace Wax {
 
             [StructLayout(LayoutKind.Sequential, Size = 16)]
             public struct val_t {
-                public /*valkind_t*/ byte kind;
+                public /*valkind_t*/byte kind;
                 public val_union of;
 
                 [StructLayout(LayoutKind.Explicit, Size = 8)]
@@ -81,36 +81,33 @@ namespace Wax {
             #endregion
             #region Valtype
             [NotYetTested]
-            [DllImport("wasmer", EntryPoint = "wasm_valtype_copy", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern IntPtr valtype_copy(IntPtr _0);
-
-            [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_valtype_new", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern IntPtr valtype_new(byte _0);
+            internal static extern IntPtr valtype_new(/*valkind_t*/byte valkind);
 
             [NotYetTested]
-            [DllImport("wasmer", EntryPoint = "wasm_valtype_kind", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern byte valtype_kind(IntPtr _0);
+            [DllImport("wasmer", EntryPoint = "wasm_valtype_copy", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr valtype_copy(IntPtr valtype);
 
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_valtype_delete", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern void valtype_delete(IntPtr _0);
+            internal static extern void valtype_delete(IntPtr valtype);
 
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_valtype_kind", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern byte valtype_kind(IntPtr valtype);
+
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static bool valkind_is_num(valkind_t k) { return k < valkind_t.ANYREF; }
+
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static bool valkind_is_ref(valkind_t k) { return k >= valkind_t.ANYREF; }
+
+            #region vec_{new,new_empty,new_uninitialized,copy,delete}
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_valtype_vec_new", CallingConvention = CallingConvention.Cdecl)]
             internal static extern void valtype_vec_new(ref vec_t/*wasm_valtype_vec_t*/ vec, ulong length, ref byte buffer);
-
-            [NotYetTested]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            internal static bool valkind_is_num(valkind_t k) {
-                return k < valkind_t.ANYREF;
-            }
-
-            [NotYetTested]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            internal static bool valkind_is_ref(valkind_t k) {
-                return k >= valkind_t.ANYREF;
-            }
 
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_valtype_vec_new_empty", CallingConvention = CallingConvention.Cdecl)]
@@ -128,7 +125,48 @@ namespace Wax {
             [DllImport("wasmer", EntryPoint = "wasm_valtype_vec_delete", CallingConvention = CallingConvention.Cdecl)]
             internal static extern void valtype_vec_delete(ref vec_t/*wasm_valtype_vec_t*/ vec);
             #endregion
+            #endregion
             #region Functype
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_functype_new", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr functype_new(ref vec_t/*wasm_valtype_vec_t*/ @params, ref vec_t/*wasm_valtype_vec_t*/ results);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_functype_copy", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr functype_copy(IntPtr functype);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_functype_delete", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void functype_delete(IntPtr functype);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_functype_params", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr functype_params(IntPtr functype);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_functype_results", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr functype_results(IntPtr functype);
+            #region vec_{new,new_empty,new_uninitialized,copy,delete}
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_functype_vec_new", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void functype_vec_new(ref vec_t/*wasm_functype_vec_t*/ vec, ulong length, ref byte buffer);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_functype_vec_new_empty", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void functype_vec_new_empty(ref vec_t/*wasm_functype_vec_t*/ vec);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_functype_vec_new_uninitialized", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void functype_vec_new_uninitialized(ref vec_t/*wasm_functype_vec_t*/ vec, ulong capacity);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_functype_vec_copy", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void functype_vec_copy(ref vec_t/*wasm_functype_vec_t*/ vec, ref vec_t/*wasm_functype_vec_t*/ vec2);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_functype_vec_delete", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void functype_vec_delete(ref vec_t/*wasm_functype_vec_t*/ vec);
+            #endregion
             #endregion
             #region Module
             [DllImport("wasmer", EntryPoint = "wasm_module_new", CallingConvention = CallingConvention.Cdecl)]
@@ -259,22 +297,33 @@ namespace Wax {
             internal static extern IntPtr ref_as_instance_const(IntPtr @ref);
             #endregion
             #region Byte, Name (WIP)
+            #region vec_{new,new_empty,new_uninitialized,copy,delete}
             [DllImport("wasmer", EntryPoint = "wasm_byte_vec_new", CallingConvention = CallingConvention.Cdecl)]
             internal static extern void byte_vec_new(ref vec_t/*wasm_byte_vec_t*/ vec, ulong length, ref byte buffer);
+
+            [DllImport("wasmer", EntryPoint = "wasm_byte_vec_new_empty", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void byte_vec_new_empty(ref vec_t/*wasm_byte_vec_t*/ vec);
 
             [DllImport("wasmer", EntryPoint = "wasm_byte_vec_new_uninitialized", CallingConvention = CallingConvention.Cdecl)]
             internal static extern void byte_vec_new_uninitialized(ref vec_t/*wasm_byte_vec_t*/ vec, ulong capacity);
 
-            [DllImport("wasmer", EntryPoint = "wasm_byte_vec_delete", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern void byte_vec_delete(ref vec_t/*wasm_byte_vec_t*/ vec);
-
             [DllImport("wasmer", EntryPoint = "wasm_byte_vec_copy", CallingConvention = CallingConvention.Cdecl)]
             internal static extern void byte_vec_copy(ref vec_t/*wasm_byte_vec_t*/ vec, ref vec_t/*wasm_byte_vec_t*/ vec2);
 
+            [DllImport("wasmer", EntryPoint = "wasm_byte_vec_delete", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void byte_vec_delete(ref vec_t/*wasm_byte_vec_t*/ vec);
+            #endregion
+            #region vec_{new,new_empty,new_uninitialized,copy,delete}
             [NotYetTested]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             internal static void name_new(ref vec_t/*wasm_byte_vec_t*/ vec, ulong length, ref byte buffer) {
                 byte_vec_new(ref vec, length, ref buffer);
+            }
+
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal static void name_new_empty(ref vec_t/*wasm_byte_vec_t*/ vec) {
+                byte_vec_new_empty(ref vec);
             }
 
             [NotYetTested]
@@ -295,10 +344,8 @@ namespace Wax {
                 byte_vec_copy(ref vec, ref vec2);
             }
             #endregion
+            #endregion
             #region Extern
-            [DllImport("wasmer", EntryPoint = "wasm_extern_vec_delete", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern void extern_vec_delete(ref vec_t/*wasm_extern_vec_t*/ vec);
-
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_extern_delete", CallingConvention = CallingConvention.Cdecl)]
             internal static extern void extern_delete(IntPtr @extern);
@@ -341,44 +388,12 @@ namespace Wax {
             internal static extern IntPtr ref_as_extern_const(IntPtr @ref);
 
             [NotYetTested]
-            [DllImport("wasmer", EntryPoint = "wasm_extern_vec_new_empty", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern void extern_vec_new_empty(ref vec_t/*wasm_extern_vec_t*/ vec);
-
-            [NotYetTested]
-            [DllImport("wasmer", EntryPoint = "wasm_extern_vec_new_uninitialized", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern void extern_vec_new_uninitialized(ref vec_t/*wasm_extern_vec_t*/ vec, ulong capacity);
-
-            [NotYetTested]
-            [DllImport("wasmer", EntryPoint = "wasm_extern_vec_new", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern void extern_vec_new(ref vec_t/*wasm_extern_vec_t*/ vec, ulong capacity, ref byte buffer);
-
-            [NotYetTested]
-            [DllImport("wasmer", EntryPoint = "wasm_extern_vec_copy", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern void extern_vec_copy(ref vec_t/*wasm_extern_vec_t*/ vec, ref vec_t/*wasm_extern_vec_t*/ vec2);
-
-            [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_extern_kind", CallingConvention = CallingConvention.Cdecl)]
             internal static extern /*externkind_t*/byte extern_kind(IntPtr @extern);
 
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_extern_type", CallingConvention = CallingConvention.Cdecl)]
             internal static extern IntPtr extern_type(IntPtr @extern);
-
-            [NotYetTested]
-            [DllImport("wasmer", EntryPoint = "wasm_func_as_extern", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern IntPtr func_as_extern(IntPtr func);
-
-            [NotYetTested]
-            [DllImport("wasmer", EntryPoint = "wasm_global_as_extern", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern IntPtr global_as_extern(IntPtr global);
-
-            [NotYetTested]
-            [DllImport("wasmer", EntryPoint = "wasm_table_as_extern", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern IntPtr table_as_extern(IntPtr table);
-
-            [NotYetTested]
-            [DllImport("wasmer", EntryPoint = "wasm_memory_as_extern", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern IntPtr memory_as_extern(IntPtr memory);
 
             [DllImport("wasmer", EntryPoint = "wasm_extern_as_func", CallingConvention = CallingConvention.Cdecl)]
             internal static extern IntPtr extern_as_func(IntPtr @extern);
@@ -396,22 +411,6 @@ namespace Wax {
             internal static extern IntPtr extern_as_memory(IntPtr @extern);
 
             [NotYetTested]
-            [DllImport("wasmer", EntryPoint = "wasm_func_as_extern_const", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern IntPtr func_as_extern_const(IntPtr func);
-
-            [NotYetTested]
-            [DllImport("wasmer", EntryPoint = "wasm_global_as_extern_const", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern IntPtr global_as_extern_const(IntPtr global);
-
-            [NotYetTested]
-            [DllImport("wasmer", EntryPoint = "wasm_table_as_extern_const", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern IntPtr table_as_extern_const(IntPtr table);
-
-            [NotYetTested]
-            [DllImport("wasmer", EntryPoint = "wasm_memory_as_extern_const", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern IntPtr memory_as_extern_const(IntPtr memory);
-
-            [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_extern_as_func_const", CallingConvention = CallingConvention.Cdecl)]
             internal static extern IntPtr extern_as_func_const(IntPtr @extern);
 
@@ -426,6 +425,59 @@ namespace Wax {
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_extern_as_memory_const", CallingConvention = CallingConvention.Cdecl)]
             internal static extern IntPtr extern_as_memory_const(IntPtr @extern);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_func_as_extern", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr func_as_extern(IntPtr func);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_func_as_extern_const", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr func_as_extern_const(IntPtr func);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_global_as_extern", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr global_as_extern(IntPtr global);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_global_as_extern_const", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr global_as_extern_const(IntPtr global);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_table_as_extern", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr table_as_extern(IntPtr table);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_table_as_extern_const", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr table_as_extern_const(IntPtr table);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_memory_as_extern", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr memory_as_extern(IntPtr memory);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_memory_as_extern_const", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern IntPtr memory_as_extern_const(IntPtr memory);
+
+            #region vec_{new,new_empty,new_uninitialized,copy,delete}
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_extern_vec_new", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void extern_vec_new(ref vec_t/*wasm_extern_vec_t*/ vec, ulong capacity, ref byte buffer);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_extern_vec_new_empty", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void extern_vec_new_empty(ref vec_t/*wasm_extern_vec_t*/ vec);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_extern_vec_new_uninitialized", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void extern_vec_new_uninitialized(ref vec_t/*wasm_extern_vec_t*/ vec, ulong capacity);
+
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_extern_vec_copy", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void extern_vec_copy(ref vec_t/*wasm_extern_vec_t*/ vec, ref vec_t/*wasm_extern_vec_t*/ vec2);
+
+            [DllImport("wasmer", EntryPoint = "wasm_extern_vec_delete", CallingConvention = CallingConvention.Cdecl)]
+            internal static extern void extern_vec_delete(ref vec_t/*wasm_extern_vec_t*/ vec);
+            #endregion
             #endregion
             [DllImport("wasmer", EntryPoint = "wasm_func_call", CallingConvention = CallingConvention.Cdecl)]
             internal static extern IntPtr func_call(IntPtr func, ref vec_t/*wasm_val_vec_t*/ vec, ref vec_t/*wasm_val_vec_t*/ results);

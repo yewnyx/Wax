@@ -5,7 +5,7 @@ using Wax.Imports;
 using Wax.Imports.Data;
 
 namespace Wax.WaxExample {
-    class WaxExample {
+    public class WaxExample {
         static void print_wasmer_error() {
             var error_len = __wasmer.last_error_length();
             Span<byte> error_str = stackalloc byte[(int)error_len];
@@ -13,7 +13,7 @@ namespace Wax.WaxExample {
             Console.Error.WriteLine(error_str.ToString());
         }
 
-        static void Main(string[] args) {
+        public static void Main(string[] args) {
             var wat_string = @"
 (module
   (type $add_one_t (func (param i32) (result i32)))
@@ -44,7 +44,7 @@ namespace Wax.WaxExample {
             __wasm.byte_vec_delete(ref wat);
 
             Console.WriteLine("Creating imports...");
-            extern_vec_t imports = new extern_vec_t();
+            extern_vec_t imports = default;
 
             Console.WriteLine("Instantiating module...");
             var instance = __wasm.instance_new(store, module, ref imports, IntPtr.Zero);
@@ -55,7 +55,7 @@ namespace Wax.WaxExample {
             }
 
             Console.WriteLine("Retrieving exports...");
-            extern_vec_t exports = new extern_vec_t();
+            extern_vec_t exports = default;
             __wasm.instance_exports(instance, ref exports);
             if (exports.size == 0) {
                 Console.Error.WriteLine("> Error accessing exports!");
@@ -63,23 +63,19 @@ namespace Wax.WaxExample {
                 Environment.Exit(1);
             }
 
-            // TODO: REMOVE
-            Console.WriteLine("y u no work debugger (console sanity check)");
-
-            // XXX FIXME: this isn't working
-            //  wasm_func_t* wasm_extern_as_func(wasm_extern_t*)
-            // https://docs.wasmtime.dev/c-api/wasm_8h.html#a7ad89a676aa4971e0d639faf29f31ec5
-            var add_one_func = __wasm.extern_as_func(exports.data); // <-- specifically this
-            if (add_one_func == IntPtr.Zero) {
-                Console.Error.WriteLine("> Error accessing export!");
-                print_wasmer_error();
-                Environment.Exit(1);
+            IntPtr add_one_func;
+            unsafe {
+                var realptr = (IntPtr*)exports.data;
+                add_one_func = __wasm.extern_as_func(*realptr); // <-- specifically this
+                if (add_one_func == IntPtr.Zero) {
+                    Console.Error.WriteLine("> Error accessing export!");
+                    print_wasmer_error();
+                    Environment.Exit(1);
+                }
             }
 
             __wasm.module_delete(module);
             __wasm.instance_delete(instance);
-
-            // TODO: Untested from here on down, until exports.data issue is addressed
 
             Console.WriteLine("Calling `add_one` function...");
             // wasm_val_t args_val[1] = { WASM_I32_VAL(1) };
@@ -117,11 +113,11 @@ namespace Wax.WaxExample {
                 Environment.Exit(1);
             }
 
+            Console.WriteLine($"Results of `add_one`: {results_val[0].of.i32}");
+
             __wasm.extern_vec_delete(ref exports);
             __wasm.store_delete(store);
             __wasm.engine_delete(engine);
-
-            Console.WriteLine("y u no work debugger (console sanity check)");
         }
     }
 }

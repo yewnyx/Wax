@@ -24,9 +24,9 @@ namespace Wax.WaxExample {
   (export ""add_one"" (func $add_one_f)))
 ";
             var wat_string_utf8 = Encoding.UTF8.GetBytes(wat_string);
-            byte_vec_t wat = default;
+            vec_t/*wasm_byte_vec_t*/ wat = default;
             __wasm.byte_vec_new(ref wat, (ulong)wat_string_utf8.Length, ref MemoryMarshal.GetReference(wat_string_utf8.AsSpan()));
-            byte_vec_t wasm_bytes = default;
+            vec_t/*wasm_byte_vec_t*/ wasm_bytes = default;
             __wasmer.wat2wasm(ref wat, ref wasm_bytes);
 
             Console.WriteLine("Creating the store...");
@@ -44,7 +44,7 @@ namespace Wax.WaxExample {
             __wasm.byte_vec_delete(ref wat);
 
             Console.WriteLine("Creating imports...");
-            extern_vec_t imports = default;
+            vec_t/*wasm_extern_vec_t*/ imports = default;
 
             Console.WriteLine("Instantiating module...");
             var instance = __wasm.instance_new(store, module, ref imports, IntPtr.Zero);
@@ -55,7 +55,7 @@ namespace Wax.WaxExample {
             }
 
             Console.WriteLine("Retrieving exports...");
-            extern_vec_t exports = default;
+            vec_t/*wasm_extern_vec_t*/ exports = default;
             __wasm.instance_exports(instance, ref exports);
             if (exports.size == 0) {
                 Console.Error.WriteLine("> Error accessing exports!");
@@ -66,7 +66,7 @@ namespace Wax.WaxExample {
             IntPtr add_one_func;
             unsafe {
                 var realptr = (IntPtr*)exports.data;
-                add_one_func = __wasm.extern_as_func(*realptr); // <-- specifically this
+                add_one_func = __wasm.extern_as_func(*realptr);
                 if (add_one_func == IntPtr.Zero) {
                     Console.Error.WriteLine("> Error accessing export!");
                     print_wasmer_error();
@@ -78,7 +78,6 @@ namespace Wax.WaxExample {
             __wasm.instance_delete(instance);
 
             Console.WriteLine("Calling `add_one` function...");
-            // wasm_val_t args_val[1] = { WASM_I32_VAL(1) };
             Span<val_t> args_val = stackalloc val_t[1] {
                 new val_t { kind = (byte)valkind_t.I32, of = { i32 = 1 } },
             };
@@ -89,7 +88,7 @@ namespace Wax.WaxExample {
 
             // QUESTION: Is this the best way? This strikes me as possibly non-ideal.
             // wasm_val_vec_t args = WASM_ARRAY_VEC(args_val);
-            val_vec_t args_vec = default;
+            vec_t/*wasm_val_vec_t*/ args_vec = default;
             args_vec.size = (ulong)args_val.Length;
             unsafe {
                 fixed (void* arg0 = &args_val[0]) {
@@ -99,7 +98,7 @@ namespace Wax.WaxExample {
 
             // QUESTION: Same as above
             // wasm_val_vec_t results = WASM_ARRAY_VEC(results_val);
-            val_vec_t results_vec = default;
+            vec_t/*wasm_val_vec_t*/ results_vec = default;
             results_vec.size = (ulong)results_val.Length;
             unsafe {
                 fixed (void* result0 = &results_val[0]) {

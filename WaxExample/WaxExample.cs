@@ -8,8 +8,22 @@ namespace Wax.WaxExample {
     public class WaxExample {
         static void print_wasmer_error() {
             var error_len = __wasmer.last_error_length();
-            Span<byte> error_str = stackalloc byte[(int)error_len];
-            __wasmer.last_error_message(ref MemoryMarshal.GetReference(error_str), error_len);
+            Span<byte> error_message = stackalloc byte[(int)error_len];
+            __wasmer.last_error_message(ref MemoryMarshal.GetReference(error_message), error_len);
+            var error_str = Encoding.UTF8.GetString(error_message.ToArray());
+            Console.Error.WriteLine(error_str.ToString());
+        }
+
+        public static void Main(string[] args) {
+        }
+    }
+
+    public class ExportsGlobalExample {
+        static void print_wasmer_error() {
+            var error_len = __wasmer.last_error_length();
+            Span<byte> error_message = stackalloc byte[(int)error_len];
+            __wasmer.last_error_message(ref MemoryMarshal.GetReference(error_message), error_len);
+            var error_str = Encoding.UTF8.GetString(error_message.ToArray());
             Console.Error.WriteLine(error_str.ToString());
         }
 
@@ -146,8 +160,9 @@ namespace Wax.WaxExample {
     public class ImportExportExample {
         static void print_wasmer_error() {
             var error_len = __wasmer.last_error_length();
-            Span<byte> error_str = stackalloc byte[(int)error_len];
-            __wasmer.last_error_message(ref MemoryMarshal.GetReference(error_str), error_len);
+            Span<byte> error_message = stackalloc byte[(int)error_len];
+            __wasmer.last_error_message(ref MemoryMarshal.GetReference(error_message), error_len);
+            var error_str = Encoding.UTF8.GetString(error_message.ToArray());
             Console.Error.WriteLine(error_str.ToString());
         }
 

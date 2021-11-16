@@ -631,11 +631,11 @@ namespace Wax {
 
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_global_get", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern void global_get(IntPtr global, IntPtr val);
+            internal static unsafe extern void global_get(IntPtr global, val_t* val);
 
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_global_set", CallingConvention = CallingConvention.Cdecl)]
-            internal static extern void global_set(IntPtr global, IntPtr val);
+            internal static unsafe extern void global_set(IntPtr global, val_t* val);
 
             #region delete, copy, same
             [NotYetTested]

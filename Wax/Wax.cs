@@ -5,6 +5,10 @@ using System.Security;
 using Wax.Imports.Data;
 
 [assembly: InternalsVisibleTo("WaxExample")]
+[assembly: InternalsVisibleTo("ExportsGlobal")]
+[assembly: InternalsVisibleTo("ImportExport")]
+[assembly: InternalsVisibleTo("Instance")]
+[assembly: InternalsVisibleTo("Memory")]
 
 namespace Wax {
     namespace Imports {

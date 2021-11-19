@@ -1171,7 +1171,7 @@ namespace Wax {
             #region Extern
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_extern_kind", CallingConvention = CallingConvention.Cdecl)]
-            public static extern /*externkind_t*/byte wasm_extern_kind(IntPtr @extern);
+            public static extern /* wasm_externkind_enum */byte wasm_extern_kind(IntPtr @extern);
 
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_extern_type", CallingConvention = CallingConvention.Cdecl)]
@@ -1403,7 +1403,7 @@ namespace Wax {
             [NotYetTested]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static IntPtr/* functype_t* */ wasm_functype_new_1_0(
-              ref /* own valtype_t* */IntPtr p) {
+              ref /* valtype_t* */IntPtr p) {
                 Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[1] { p };
 
                 wasm_valtype_vec_t @params = default;
@@ -1418,8 +1418,8 @@ namespace Wax {
             [NotYetTested]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static IntPtr/* functype_t* */ wasm_functype_new_2_0(
-              ref /* own valtype_t* */IntPtr p1,
-              ref /* own valtype_t* */IntPtr p2) {
+              ref /* valtype_t* */IntPtr p1,
+              ref /* valtype_t* */IntPtr p2) {
                 Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[2] { p1, p2 };
 
                 wasm_valtype_vec_t @params = default;
@@ -1434,9 +1434,9 @@ namespace Wax {
             [NotYetTested]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static IntPtr/* functype_t* */ wasm_functype_new_3_0(
-              ref /* own valtype_t* */IntPtr p1,
-              ref /* own valtype_t* */IntPtr p2,
-              ref /* own valtype_t* */IntPtr p3) {
+              ref /* valtype_t* */IntPtr p1,
+              ref /* valtype_t* */IntPtr p2,
+              ref /* valtype_t* */IntPtr p3) {
                 Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[3] { p1, p2, p3 };
 
                 wasm_valtype_vec_t @params = default;
@@ -1450,7 +1450,7 @@ namespace Wax {
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static IntPtr/* functype_t* */ wasm_functype_new_0_1(
-              ref /* own valtype_t* */IntPtr r
+              ref /* valtype_t* */IntPtr r
             ) {
                 Span</* valtype_t* */IntPtr> rs = stackalloc IntPtr[1] { r };
 
@@ -1466,8 +1466,8 @@ namespace Wax {
             [NotYetTested]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static IntPtr/* functype_t* */ wasm_functype_new_1_1(
-              ref /* own valtype_t* */IntPtr p,
-              ref /* own valtype_t* */IntPtr r) {
+              ref /* valtype_t* */IntPtr p,
+              ref /* valtype_t* */IntPtr r) {
                 Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[1] { p };
                 Span</* valtype_t* */IntPtr> rs = stackalloc IntPtr[1] { r };
 
@@ -1483,9 +1483,9 @@ namespace Wax {
             [NotYetTested]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static IntPtr/* functype_t* */ wasm_functype_new_2_1(
-                ref /* own valtype_t* */IntPtr p1,
-                ref /* own valtype_t* */IntPtr p2,
-                ref /* own valtype_t* */IntPtr r) {
+                ref /* valtype_t* */IntPtr p1,
+                ref /* valtype_t* */IntPtr p2,
+                ref /* valtype_t* */IntPtr r) {
                 Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[2] { p1, p2 };
                 Span</* valtype_t* */IntPtr> rs = stackalloc IntPtr[1] { r };
 
@@ -1501,10 +1501,10 @@ namespace Wax {
             [NotYetTested]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static IntPtr/* functype_t* */ wasm_functype_new_3_1(
-              ref /* own valtype_t* */IntPtr p1,
-              ref /* own valtype_t* */IntPtr p2,
-              ref /* own valtype_t* */IntPtr p3,
-              ref /* own valtype_t* */IntPtr r) {
+              ref /* valtype_t* */IntPtr p1,
+              ref /* valtype_t* */IntPtr p2,
+              ref /* valtype_t* */IntPtr p3,
+              ref /* valtype_t* */IntPtr r) {
                 Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[3] { p1, p2, p3 };
                 Span</* valtype_t* */IntPtr> rs = stackalloc IntPtr[1] { r };
 
@@ -1520,8 +1520,8 @@ namespace Wax {
             [NotYetTested]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static IntPtr/* functype_t* */ wasm_functype_new_0_2(
-              ref /* own valtype_t* */IntPtr r1,
-              ref /* own valtype_t* */IntPtr r2) {
+              ref /* valtype_t* */IntPtr r1,
+              ref /* valtype_t* */IntPtr r2) {
                 Span</* valtype_t* */IntPtr> rs = stackalloc IntPtr[2] { r1, r2 };
 
                 wasm_valtype_vec_t @params = default;
@@ -1537,9 +1537,9 @@ namespace Wax {
             [NotYetTested]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static IntPtr/* functype_t* */ wasm_functype_new_1_2(
-              ref /* own valtype_t* */IntPtr p,
-              ref /* own valtype_t* */IntPtr r1,
-              ref /* own valtype_t* */IntPtr r2) {
+              ref /* valtype_t* */IntPtr p,
+              ref /* valtype_t* */IntPtr r1,
+              ref /* valtype_t* */IntPtr r2) {
                 Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[1] { p };
                 Span</* valtype_t* */IntPtr> rs = stackalloc IntPtr[2] { r1, r2 };
 
@@ -1555,10 +1555,10 @@ namespace Wax {
             [NotYetTested]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static IntPtr/* functype_t* */ wasm_functype_new_2_2(
-              ref /* own valtype_t* */IntPtr p1,
-              ref /* own valtype_t* */IntPtr p2,
-              ref /* own valtype_t* */IntPtr r1,
-              ref /* own valtype_t* */IntPtr r2) {
+              ref /* valtype_t* */IntPtr p1,
+              ref /* valtype_t* */IntPtr p2,
+              ref /* valtype_t* */IntPtr r1,
+              ref /* valtype_t* */IntPtr r2) {
                 Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[2] { p1, p2 };
                 Span</* valtype_t* */IntPtr> rs = stackalloc IntPtr[2] { r1, r2 };
 
@@ -1574,11 +1574,11 @@ namespace Wax {
             [NotYetTested]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static IntPtr/* functype_t* */ wasm_functype_new_3_2(
-              ref /* own valtype_t* */IntPtr p1,
-              ref /* own valtype_t* */IntPtr p2,
-              ref /* own valtype_t* */IntPtr p3,
-              ref /* own valtype_t* */IntPtr r1,
-              ref /* own valtype_t* */IntPtr r2) {
+              ref /* valtype_t* */IntPtr p1,
+              ref /* valtype_t* */IntPtr p2,
+              ref /* valtype_t* */IntPtr p3,
+              ref /* valtype_t* */IntPtr r1,
+              ref /* valtype_t* */IntPtr r2) {
                 Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[3] { p1, p2, p3 };
                 Span</* valtype_t* */IntPtr> rs = stackalloc IntPtr[2] { r1, r2 };
 

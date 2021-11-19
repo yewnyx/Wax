@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Wax.Imports;
 using Wax.Imports.Data;
+using static Wax.Imports.__wasm;
 
 namespace Wax.Examples {
     public class InstanceExample {
@@ -25,29 +26,29 @@ namespace Wax.Examples {
 ";
             var wat_string_utf8 = Encoding.UTF8.GetBytes(wat_string);
             vec_t/*wasm_byte_vec_t*/ wat = default;
-            __wasm.byte_vec_new(ref wat, (ulong)wat_string_utf8.Length, ref MemoryMarshal.GetReference(wat_string_utf8.AsSpan()));
+            wasm_byte_vec_new(ref wat, (ulong)wat_string_utf8.Length, ref MemoryMarshal.GetReference(wat_string_utf8.AsSpan()));
             vec_t/*wasm_byte_vec_t*/ wasm_bytes = default;
             __wasmer.wat2wasm(ref wat, ref wasm_bytes);
 
             Console.WriteLine("Creating the store...");
-            var engine = __wasm.engine_new();
-            var store = __wasm.store_new(engine);
+            var engine = wasm_engine_new();
+            var store = wasm_store_new(engine);
 
             Console.WriteLine("Compiling module...");
-            var module = __wasm.module_new(store, ref wasm_bytes);
+            var module = wasm_module_new(store, ref wasm_bytes);
             if (module == null) {
                 Console.Error.WriteLine("> Error compiling module!");
                 print_wasmer_error();
                 Environment.Exit(1);
             }
 
-            __wasm.byte_vec_delete(ref wat);
+            wasm_byte_vec_delete(ref wat);
 
             Console.WriteLine("Creating imports...");
             vec_t/*wasm_extern_vec_t*/ imports = default;
 
             Console.WriteLine("Instantiating module...");
-            var instance = __wasm.instance_new(store, module, ref imports, IntPtr.Zero);
+            var instance = wasm_instance_new(store, module, ref imports, IntPtr.Zero);
             if (instance == null) {
                 Console.Error.WriteLine("> Error instantiating module!");
                 print_wasmer_error();
@@ -56,7 +57,7 @@ namespace Wax.Examples {
 
             Console.WriteLine("Retrieving exports...");
             vec_t/*wasm_extern_vec_t*/ exports = default;
-            __wasm.instance_exports(instance, ref exports);
+            wasm_instance_exports(instance, ref exports);
             if (exports.size == 0) {
                 Console.Error.WriteLine("> Error accessing exports!");
                 print_wasmer_error();
@@ -66,7 +67,7 @@ namespace Wax.Examples {
             IntPtr add_one_func;
             unsafe {
                 var realptr = (IntPtr*)exports.data;
-                add_one_func = __wasm.extern_as_func(*realptr);
+                add_one_func = wasm_extern_as_func(*realptr);
                 if (add_one_func == IntPtr.Zero) {
                     Console.Error.WriteLine("> Error accessing export!");
                     print_wasmer_error();
@@ -74,15 +75,15 @@ namespace Wax.Examples {
                 }
             }
 
-            __wasm.module_delete(module);
-            __wasm.instance_delete(instance);
+            wasm_module_delete(module);
+            wasm_instance_delete(instance);
 
             Console.WriteLine("Calling `add_one` function...");
-            Span<val_t> args_val = stackalloc val_t[1] {
-                new val_t { kind = (byte)valkind_t.I32, of = { i32 = 1 } },
+            Span<wasm_val_t> args_val = stackalloc wasm_val_t[1] {
+                new wasm_val_t { kind = (byte)wasm_valkind_enum.I32, of = { i32 = 1 } },
             };
-            Span<val_t> results_val = stackalloc val_t[1] {
-                new val_t { kind = (byte)valkind_t.ANYREF, of = { @ref = IntPtr.Zero } },
+            Span<wasm_val_t> results_val = stackalloc wasm_val_t[1] {
+                new wasm_val_t { kind = (byte)wasm_valkind_enum.ANYREF, of = { @ref = IntPtr.Zero } },
             };
 
             vec_t/*wasm_val_vec_t*/ args_vec = default;
@@ -101,7 +102,7 @@ namespace Wax.Examples {
                 }
             }
 
-            if (__wasm.func_call(add_one_func, ref args_vec, ref results_vec) != IntPtr.Zero) {
+            if (wasm_func_call(add_one_func, ref args_vec, ref results_vec) != IntPtr.Zero) {
                 Console.Error.WriteLine("> Error calling function!");
                 print_wasmer_error();
                 Environment.Exit(1);
@@ -109,9 +110,9 @@ namespace Wax.Examples {
 
             Console.WriteLine($"Results of `add_one`: {results_val[0].of.i32}");
 
-            __wasm.extern_vec_delete(ref exports);
-            __wasm.store_delete(store);
-            __wasm.engine_delete(engine);
+            wasm_extern_vec_delete(ref exports);
+            wasm_store_delete(store);
+            wasm_engine_delete(engine);
         }
     }
 }

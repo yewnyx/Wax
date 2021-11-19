@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Wax.Imports;
 using Wax.Imports.Data;
+using static Wax.Imports.__wasm;
 
 namespace Wax.Examples {
     public class MemoryExample {
@@ -34,31 +35,31 @@ namespace Wax.Examples {
 ";
             var wat_string_utf8 = Encoding.UTF8.GetBytes(wat_string);
             vec_t/*wasm_byte_vec_t*/ wat = default;
-            __wasm.byte_vec_new(ref wat, (ulong)wat_string_utf8.Length, ref MemoryMarshal.GetReference(wat_string_utf8.AsSpan()));
+            wasm_byte_vec_new(ref wat, (ulong)wat_string_utf8.Length, ref MemoryMarshal.GetReference(wat_string_utf8.AsSpan()));
             vec_t/*wasm_byte_vec_t*/ wasm_bytes = default;
             __wasmer.wat2wasm(ref wat, ref wasm_bytes);
-            __wasm.byte_vec_delete(ref wat);
+            wasm_byte_vec_delete(ref wat);
 
             Console.WriteLine("Creating the store...");
-            var engine = __wasm.engine_new();
-            var store = __wasm.store_new(engine);
+            var engine = wasm_engine_new();
+            var store = wasm_store_new(engine);
 
             Console.WriteLine("Compiling module...");
-            var module = __wasm.module_new(store, ref wasm_bytes);
+            var module = wasm_module_new(store, ref wasm_bytes);
             if (module == null) {
                 Console.Error.WriteLine("> Error compiling module!");
                 print_wasmer_error();
                 Environment.Exit(1);
             }
 
-            __wasm.byte_vec_delete(ref wasm_bytes);
+            wasm_byte_vec_delete(ref wasm_bytes);
 
             Console.WriteLine("Creating imports...");
             vec_t/*wasm_extern_vec_t*/ imports = default;
-            __wasm.extern_vec_new_empty(ref imports);
+            wasm_extern_vec_new_empty(ref imports);
 
             Console.WriteLine("Instantiating module...");
-            var instance = __wasm.instance_new(store, module, ref imports, IntPtr.Zero);
+            var instance = wasm_instance_new(store, module, ref imports, IntPtr.Zero);
             if (instance == null) {
                 Console.Error.WriteLine("> Error instantiating module!");
                 print_wasmer_error();
@@ -67,7 +68,7 @@ namespace Wax.Examples {
 
             Console.WriteLine("Retrieving exports...");
             vec_t/*wasm_extern_vec_t*/ exports = default;
-            __wasm.instance_exports(instance, ref exports); // <-- CRASHES HERE
+            wasm_instance_exports(instance, ref exports); // <-- CRASHES HERE
             if (exports.size == 0) {
                 Console.Error.WriteLine("> Error accessing exports!");
                 print_wasmer_error();
@@ -79,33 +80,33 @@ namespace Wax.Examples {
                 exports_span = new Span<IntPtr>((IntPtr*)exports.data, (int)exports.size);
             }
 
-            var get_at = __wasm.extern_as_func(exports_span[0]);
-            var set_at = __wasm.extern_as_func(exports_span[1]);
-            var mem_size = __wasm.extern_as_func(exports_span[2]);
-            var memory = __wasm.extern_as_memory(exports_span[3]);
+            var get_at = wasm_extern_as_func(exports_span[0]);
+            var set_at = wasm_extern_as_func(exports_span[1]);
+            var mem_size = wasm_extern_as_func(exports_span[2]);
+            var memory = wasm_extern_as_memory(exports_span[3]);
 
             Console.WriteLine("Querying memory size...");
-            var pages = __wasm.memory_size(memory);
-            var data_size = __wasm.memory_data_size(memory);
+            var pages = wasm_memory_size(memory);
+            var data_size = wasm_memory_data_size(memory);
             Console.WriteLine($"Memory size (pages): {pages}");
             Console.WriteLine($"Memory size (bytes): {data_size}");
 
             Console.WriteLine("Growing memory...\n");
-            if (!__wasm.memory_grow(memory, 2)) {
+            if (!wasm_memory_grow(memory, 2)) {
                 Console.WriteLine("> Error growing memory!");
                 print_wasmer_error();
                 Environment.Exit(1);
             }
 
-            var new_pages = __wasm.memory_size(memory);
+            var new_pages = wasm_memory_size(memory);
             Console.WriteLine($"New memory size (pages): {new_pages}");
 
             int mem_addr = 0x2220;
             int val = 0xFEFEFFE;
 
-            Span<val_t> set_at_args_val = stackalloc val_t[2] {
-                new val_t { kind = (byte)valkind_t.I32, of = { i32 = mem_addr } },
-                new val_t { kind = (byte)valkind_t.I32, of = { i32 = val } },
+            Span<wasm_val_t> set_at_args_val = stackalloc wasm_val_t[2] {
+                new wasm_val_t { kind = (byte)wasm_valkind_enum.I32, of = { i32 = mem_addr } },
+                new wasm_val_t { kind = (byte)wasm_valkind_enum.I32, of = { i32 = val } },
             };
 
             vec_t/*wasm_val_vec_t*/ set_at_args = default;
@@ -117,12 +118,12 @@ namespace Wax.Examples {
             }
 
             vec_t/*wasm_val_vec_t*/ set_at_results = default;
-            __wasm.valtype_vec_new_empty(ref set_at_results);
+            wasm_valtype_vec_new_empty(ref set_at_results);
 
-            __wasm.func_call(set_at, ref set_at_args, ref set_at_results);
+            wasm_func_call(set_at, ref set_at_args, ref set_at_results);
 
-            Span<val_t> get_at_args_val = stackalloc val_t[1] {
-                new val_t { kind = (byte)valkind_t.I32, of = { i32 = mem_addr } },
+            Span<wasm_val_t> get_at_args_val = stackalloc wasm_val_t[1] {
+                new wasm_val_t { kind = (byte)wasm_valkind_enum.I32, of = { i32 = mem_addr } },
             };
 
             vec_t/*wasm_val_vec_t*/ get_at_args = default;
@@ -133,8 +134,8 @@ namespace Wax.Examples {
                 }
             }
 
-            Span<val_t> get_at_results_val = stackalloc val_t[1] {
-                new val_t { kind = (byte)valkind_t.ANYREF, of = { @ref = IntPtr.Zero } },
+            Span<wasm_val_t> get_at_results_val = stackalloc wasm_val_t[1] {
+                new wasm_val_t { kind = (byte)wasm_valkind_enum.ANYREF, of = { @ref = IntPtr.Zero } },
             };
 
             vec_t/*wasm_val_vec_t*/ get_at_results = default;
@@ -145,15 +146,15 @@ namespace Wax.Examples {
                 }
             }
 
-            __wasm.func_call(get_at, ref get_at_args, ref get_at_results);
+            wasm_func_call(get_at, ref get_at_args, ref get_at_results);
 
             Console.WriteLine($"Value at {mem_addr:X}: {get_at_results_val[0].of.i32:X}");
 
-            __wasm.extern_vec_delete(ref exports);
-            __wasm.module_delete(module);
-            __wasm.instance_delete(instance);
-            __wasm.store_delete(store);
-            __wasm.engine_delete(engine);
+            wasm_extern_vec_delete(ref exports);
+            wasm_module_delete(module);
+            wasm_instance_delete(instance);
+            wasm_store_delete(store);
+            wasm_engine_delete(engine);
         }
     }
 }

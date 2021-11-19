@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using Wax.Imports;
-using Wax.Imports.Data;
+
 using static Wax.Imports.__wasm;
 
 namespace Wax.Examples {

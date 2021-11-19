@@ -2,71 +2,68 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
-using Wax.Imports.Data;
 
 namespace Wax {
     namespace Imports {
         [System.AttributeUsage(System.AttributeTargets.Method)]
         class NotYetTestedAttribute : Attribute { }
 
-        namespace Data {
-            public enum wasm_mutability_enum {
-                CONST = 0,
-                VAR = 1,
-            };
+        public enum wasm_mutability_enum {
+            CONST = 0,
+            VAR = 1,
+        };
 
-            public enum wasm_valkind_enum {
-                I32 = 0,
-                I64 = 1,
-                F32 = 2,
-                F64 = 3,
-                ANYREF = 128,
-                FUNCREF = 129
-            }
+        public enum wasm_valkind_enum {
+            I32 = 0,
+            I64 = 1,
+            F32 = 2,
+            F64 = 3,
+            ANYREF = 128,
+            FUNCREF = 129
+        }
 
-            public enum wasm_externkind_enum {
-                FUNC = 0,
-                GLOBAL = 1,
-                TABLE = 2,
-                MEMORY = 3
-            }
+        public enum wasm_externkind_enum {
+            FUNC = 0,
+            GLOBAL = 1,
+            TABLE = 2,
+            MEMORY = 3
+        }
 
-            [StructLayout(LayoutKind.Sequential, Size = 8)]
-            public unsafe struct wasm_limits_t {
-                public uint min;
-                public uint max;
+        [StructLayout(LayoutKind.Sequential, Size = 8)]
+        public unsafe struct wasm_limits_t {
+            public uint min;
+            public uint max;
 
-                public const uint max_default = 0xffffffff;
-            }
+            public const uint max_default = 0xffffffff;
+        }
 
-            [StructLayout(LayoutKind.Sequential, Size = 16)]
-            public unsafe struct vec_t {
-                public ulong size;
-                public IntPtr data;
-            }
+        [StructLayout(LayoutKind.Sequential, Size = 16)]
+        public unsafe struct vec_t {
+            public ulong size;
+            public IntPtr data;
+        }
 
-            [StructLayout(LayoutKind.Sequential, Size = 16)]
-            public unsafe struct wasm_val_t {
-                public /* valkind_t */byte kind;
-                public val_union of;
+        [StructLayout(LayoutKind.Sequential, Size = 16)]
+        public unsafe struct wasm_val_t {
+            public /* valkind_t */byte kind;
+            public val_union of;
 
-                [StructLayout(LayoutKind.Explicit, Size = 8)]
-                public unsafe struct val_union {
-                    [FieldOffset(0)]
-                    public int i32;
+            [StructLayout(LayoutKind.Explicit, Size = 8)]
+            public unsafe struct val_union {
+                [FieldOffset(0)]
+                public int i32;
 
-                    [FieldOffset(0)]
-                    public long i64;
+                [FieldOffset(0)]
+                public long i64;
 
-                    [FieldOffset(0)]
-                    public float f32;
+                [FieldOffset(0)]
+                public float f32;
 
-                    [FieldOffset(0)]
-                    public double f64;
+                [FieldOffset(0)]
+                public double f64;
 
-                    [FieldOffset(0)]
-                    public IntPtr @ref;
-                }
+                [FieldOffset(0)]
+                public IntPtr @ref;
             }
         }
 

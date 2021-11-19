@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using Wax.Imports.Data;
 
+[assembly: InternalsVisibleTo("EarlyExit")]
 [assembly: InternalsVisibleTo("ExportsGlobal")]
 [assembly: InternalsVisibleTo("ImportExport")]
 [assembly: InternalsVisibleTo("Instance")]

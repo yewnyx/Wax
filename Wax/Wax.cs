@@ -710,38 +710,48 @@ namespace Wax {
             [DllImport("wasmer", EntryPoint = "wasm_foreign_new", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr wasm_foreign_new(IntPtr _0);
             #region delete, copy, same
-            [NotYetTested][DllImport("wasmer", EntryPoint = "wasm_foreign_delete", CallingConvention = CallingConvention.Cdecl)]
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_foreign_delete", CallingConvention = CallingConvention.Cdecl)]
             public static extern void wasm_foreign_delete(IntPtr _0);
 
-            [NotYetTested][DllImport("wasmer", EntryPoint = "wasm_foreign_copy", CallingConvention = CallingConvention.Cdecl)]
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_foreign_copy", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr wasm_foreign_copy(IntPtr _0);
 
-            [NotYetTested][DllImport("wasmer", EntryPoint = "wasm_foreign_same", CallingConvention = CallingConvention.Cdecl)]
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_foreign_same", CallingConvention = CallingConvention.Cdecl)]
             [return: MarshalAs(UnmanagedType.I1)]
             public static extern bool wasm_foreign_same(IntPtr _0, IntPtr _1);
             #endregion
             #region host info
-            [NotYetTested][DllImport("wasmer", EntryPoint = "wasm_foreign_get_host_info", CallingConvention = CallingConvention.Cdecl)]
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_foreign_get_host_info", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr wasm_foreign_get_host_info(IntPtr _0);
 
-            [NotYetTested][DllImport("wasmer", EntryPoint = "wasm_foreign_set_host_info", CallingConvention = CallingConvention.Cdecl)]
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_foreign_set_host_info", CallingConvention = CallingConvention.Cdecl)]
             public static extern void wasm_foreign_set_host_info(IntPtr _0, IntPtr _1);
 
-            [NotYetTested][DllImport("wasmer", EntryPoint = "wasm_foreign_set_host_info_with_finalizer", CallingConvention = CallingConvention.Cdecl)]
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_foreign_set_host_info_with_finalizer", CallingConvention = CallingConvention.Cdecl)]
             public static extern void wasm_foreign_set_host_info_with_finalizer(IntPtr _0, IntPtr _1, IntPtr _2);
             #endregion
             #region Casts (foreign_as)
-            [NotYetTested][DllImport("wasmer", EntryPoint = "wasm_foreign_as_ref", CallingConvention = CallingConvention.Cdecl)]
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_foreign_as_ref", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr wasm_foreign_as_ref(IntPtr _0);
 
-            [NotYetTested][DllImport("wasmer", EntryPoint = "wasm_foreign_as_ref_const", CallingConvention = CallingConvention.Cdecl)]
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_foreign_as_ref_const", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr wasm_foreign_as_ref_const(IntPtr _0);
             #endregion
             #region Casts (as_foreign)
-            [NotYetTested][DllImport("wasmer", EntryPoint = "wasm_ref_as_foreign", CallingConvention = CallingConvention.Cdecl)]
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_ref_as_foreign", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr wasm_ref_as_foreign(IntPtr _0);
 
-            [NotYetTested][DllImport("wasmer", EntryPoint = "wasm_ref_as_foreign_const", CallingConvention = CallingConvention.Cdecl)]
+            [NotYetTested]
+            [DllImport("wasmer", EntryPoint = "wasm_ref_as_foreign_const", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr wasm_ref_as_foreign_const(IntPtr _0);
             #endregion
             #endregion

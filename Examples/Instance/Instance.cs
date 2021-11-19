@@ -25,9 +25,9 @@ namespace Wax.Examples {
   (export ""add_one"" (func $add_one_f)))
 ";
             var wat_string_utf8 = Encoding.UTF8.GetBytes(wat_string);
-            vec_t/*wasm_byte_vec_t*/ wat = default;
+            wasm_byte_vec_t wat = default;
             wasm_byte_vec_new(ref wat, (ulong)wat_string_utf8.Length, ref MemoryMarshal.GetReference(wat_string_utf8.AsSpan()));
-            vec_t/*wasm_byte_vec_t*/ wasm_bytes = default;
+            wasm_byte_vec_t wasm_bytes = default;
             __wasmer.wat2wasm(ref wat, ref wasm_bytes);
 
             Console.WriteLine("Creating the store...");
@@ -45,7 +45,7 @@ namespace Wax.Examples {
             wasm_byte_vec_delete(ref wat);
 
             Console.WriteLine("Creating imports...");
-            vec_t/*wasm_extern_vec_t*/ imports = default;
+            wasm_extern_vec_t imports = default;
 
             Console.WriteLine("Instantiating module...");
             var instance = wasm_instance_new(store, module, ref imports, IntPtr.Zero);
@@ -56,7 +56,7 @@ namespace Wax.Examples {
             }
 
             Console.WriteLine("Retrieving exports...");
-            vec_t/*wasm_extern_vec_t*/ exports = default;
+            wasm_extern_vec_t exports = default;
             wasm_instance_exports(instance, ref exports);
             if (exports.size == 0) {
                 Console.Error.WriteLine("> Error accessing exports!");
@@ -86,7 +86,7 @@ namespace Wax.Examples {
                 new wasm_val_t { kind = (byte)wasm_valkind_enum.ANYREF, of = { @ref = IntPtr.Zero } },
             };
 
-            vec_t/*wasm_val_vec_t*/ args_vec = default;
+            wasm_val_vec_t args_vec = default;
             args_vec.size = (ulong)args_val.Length;
             unsafe {
                 fixed (void* arg0 = &args_val[0]) {
@@ -94,7 +94,7 @@ namespace Wax.Examples {
                 }
             }
 
-            vec_t/*wasm_val_vec_t*/ results_vec = default;
+            wasm_val_vec_t results_vec = default;
             results_vec.size = (ulong)results_val.Length;
             unsafe {
                 fixed (void* result0 = &results_val[0]) {

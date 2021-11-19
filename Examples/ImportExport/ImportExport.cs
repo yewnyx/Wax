@@ -15,7 +15,7 @@ namespace Wax.Examples {
             Console.Error.WriteLine(error_str.ToString());
         }
 
-        static IntPtr host_func_callback(ref vec_t/* val_vec_t */args, ref vec_t/* val_vec_t */results) {
+        static IntPtr host_func_callback(ref wasm_val_vec_t args, ref wasm_val_vec_t results) {
             Console.WriteLine("Calling back...");
             Console.Write("> ");
 
@@ -37,9 +37,9 @@ namespace Wax.Examples {
   (memory $memory (export ""guest_memory"") 1))
 ";
             var wat_string_utf8 = Encoding.UTF8.GetBytes(wat_string);
-            vec_t/*wasm_byte_vec_t*/ wat = default;
+            wasm_byte_vec_t wat = default;
             wasm_byte_vec_new(ref wat, (ulong)wat_string_utf8.Length, ref MemoryMarshal.GetReference(wat_string_utf8.AsSpan()));
-            vec_t/*wasm_byte_vec_t*/ wasm_bytes = default;
+            wasm_byte_vec_t wasm_bytes = default;
             __wasmer.wat2wasm(ref wat, ref wasm_bytes);
             wasm_byte_vec_delete(ref wat);
 
@@ -75,7 +75,7 @@ namespace Wax.Examples {
                 wasm_global_as_extern(host_global),
             };
 
-            vec_t/* extern_vec_t */ import_object = default;
+            wasm_extern_vec_t import_object = default;
             import_object.size = (ulong)imports.Length;
             unsafe {
                 fixed (void* arg0 = &imports[0]) {
@@ -92,7 +92,7 @@ namespace Wax.Examples {
             }
 
             Console.WriteLine("Retrieving exports...");
-            vec_t/*wasm_extern_vec_t*/ exports = default;
+            wasm_extern_vec_t exports = default;
             wasm_instance_exports(instance, ref exports);
             if (exports.size == 0) {
                 Console.Error.WriteLine("> Error accessing exports!");

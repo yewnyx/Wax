@@ -25,9 +25,9 @@ namespace Wax.Examples {
   (func(export ""set_some"")(param f32)(global.set $some(local.get 0))))
 ";
             var wat_string_utf8 = Encoding.UTF8.GetBytes(wat_string);
-            vec_t/*wasm_byte_vec_t*/ wat = default;
+            wasm_byte_vec_t wat = default;
             wasm_byte_vec_new(ref wat, (ulong)wat_string_utf8.Length, ref MemoryMarshal.GetReference(wat_string_utf8.AsSpan()));
-            vec_t/*wasm_byte_vec_t*/ wasm_bytes = default;
+            wasm_byte_vec_t wasm_bytes = default;
             __wasmer.wat2wasm(ref wat, ref wasm_bytes);
             wasm_byte_vec_delete(ref wat);
 
@@ -46,7 +46,7 @@ namespace Wax.Examples {
             wasm_byte_vec_delete(ref wasm_bytes);
 
             Console.WriteLine("Creating imports...");
-            vec_t/*wasm_extern_vec_t*/ imports = default;
+            wasm_extern_vec_t imports = default;
             wasm_extern_vec_new_empty(ref imports);
 
             Console.WriteLine("Instantiating module...");
@@ -58,7 +58,7 @@ namespace Wax.Examples {
             }
 
             Console.WriteLine("Retrieving exports...");
-            vec_t/*wasm_extern_vec_t*/ exports = default;
+            wasm_extern_vec_t exports = default;
             wasm_instance_exports(instance, ref exports);
             if (exports.size == 0) {
                 Console.Error.WriteLine("> Error accessing exports!");

@@ -26,10 +26,10 @@ namespace Wax.Examples {
 
         static IntPtr store;
 
-        static IntPtr early_exit(ref vec_t/* val_vec_t */args, ref vec_t/* val_vec_t */results) {
+        static IntPtr early_exit(ref wasm_val_vec_t args, ref wasm_val_vec_t results) {
             var trap_string = "trapping from a host import\0";
             var trap_string_utf8 = Encoding.UTF8.GetBytes(trap_string);
-            vec_t/* byte_vec_t */ trap_message = default;
+            wasm_byte_vec_t trap_message = default;
             wasm_byte_vec_new(ref trap_message, (ulong)trap_string_utf8.Length, ref MemoryMarshal.GetReference(trap_string_utf8.AsSpan()));
             var trap = wasm_trap_new(store, ref trap_message);
             wasm_byte_vec_delete(ref trap_message);
@@ -51,7 +51,7 @@ namespace Wax.Examples {
                 return;
             }
 
-            vec_t/* byte_vec_t */ binary = default;
+            wasm_byte_vec_t binary = default;
             wasm_byte_vec_new_uninitialized(ref binary, (ulong)file.Length);
             Marshal.Copy(file, 0, binary.data, file.Length);
 
@@ -70,13 +70,13 @@ namespace Wax.Examples {
             var host_func = wasm_func_new(store, host_func_type, fp4del);
             wasm_functype_delete(host_func_type);
 
-            //vec_t/* extern_vec_t */ imports = default;
+            //wasm_extern_vec_t imports = default;
             // NOTE: Modified from extern_vec_new_uninitialized in C source.
             // Fix after doing a pointer style pass on the code
             //extern_vec_new_uninitialized(ref imports, 1);
 
             Span<IntPtr> imports_span = stackalloc IntPtr[1] { wasm_func_as_extern(host_func) };
-            vec_t/* extern_vec_t */ imports = default;
+            wasm_extern_vec_t imports = default;
             imports.size = (ulong)imports_span.Length;
             unsafe {
                 fixed (void* arg0 = &imports_span[0]) {
@@ -92,7 +92,7 @@ namespace Wax.Examples {
             }
 
             Console.WriteLine("Extracting export...");
-            vec_t/* extern_vec_t */ exports = default;
+            wasm_extern_vec_t exports = default;
             wasm_instance_exports(instance, ref exports);
             if (exports.size == 0) {
                 Console.Error.WriteLine("> Error accessing exports!");
@@ -124,7 +124,7 @@ namespace Wax.Examples {
                 new wasm_val_t { kind = (byte)wasm_valkind_enum.ANYREF, of = { @ref = IntPtr.Zero } },
             };
 
-            vec_t/* val_vec_t */ args_vec = default;
+            wasm_val_vec_t args_vec = default;
             args_vec.size = (ulong)args_val.Length;
             unsafe {
                 fixed (void* arg0 = &args_val[0]) {
@@ -132,7 +132,7 @@ namespace Wax.Examples {
                 }
             }
 
-            vec_t/* val_vec_t */ results_vec = default;
+            wasm_val_vec_t results_vec = default;
             results_vec.size = (ulong)results_val.Length;
             unsafe {
                 fixed (void* result0 = &results_val[0]) {
@@ -148,7 +148,7 @@ namespace Wax.Examples {
             }
 
             Console.WriteLine("Printing message...");
-            vec_t/* byte_vec_t */ message = default;
+            wasm_byte_vec_t message = default;
             wasm_trap_message(trap, ref message);
             string message_str;
             unsafe {
@@ -166,7 +166,7 @@ namespace Wax.Examples {
             }
 
             Console.WriteLine("Printing trace...");
-            vec_t/* frame_vec_t */ trace = default;
+            wasm_frame_vec_t trace = default;
             wasm_trap_trace(trap, ref trace);
             if (trace.size > 0) {
                 Span<IntPtr> trace_span;

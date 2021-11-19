@@ -38,7 +38,7 @@ namespace Wax {
             }
 
             [StructLayout(LayoutKind.Sequential, Size = 8)]
-            public struct wasm_limits_t {
+            public unsafe struct wasm_limits_t {
                 public uint min;
                 public uint max;
 
@@ -46,18 +46,18 @@ namespace Wax {
             }
 
             [StructLayout(LayoutKind.Sequential, Size = 16)]
-            public struct vec_t {
+            public unsafe struct vec_t {
                 public ulong size;
                 public IntPtr data;
             }
 
             [StructLayout(LayoutKind.Sequential, Size = 16)]
-            public struct wasm_val_t {
+            public unsafe struct wasm_val_t {
                 public /* valkind_t */byte kind;
                 public val_union of;
 
                 [StructLayout(LayoutKind.Explicit, Size = 8)]
-                public struct val_union {
+                public unsafe struct val_union {
                     [FieldOffset(0)]
                     public int i32;
 
@@ -77,7 +77,7 @@ namespace Wax {
         }
 
         [SuppressUnmanagedCodeSecurity]
-        internal static class __wasm {
+        internal static unsafe class __wasm {
             #region Byte, Name
             #region vec_{new,new_empty,new_uninitialized,copy,delete}
             [DllImport("wasmer", EntryPoint = "wasm_byte_vec_new", CallingConvention = CallingConvention.Cdecl)]
@@ -286,7 +286,7 @@ namespace Wax {
 
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_tabletype_limits", CallingConvention = CallingConvention.Cdecl)]
-            internal static unsafe extern wasm_limits_t* wasm_tabletype_limits(IntPtr tabletype);
+            internal static extern wasm_limits_t* wasm_tabletype_limits(IntPtr tabletype);
 
             [NotYetTested]
             #region new, copy, delete
@@ -326,7 +326,7 @@ namespace Wax {
             #region Memorytype
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_memorytype_limits", CallingConvention = CallingConvention.Cdecl)]
-            internal static unsafe extern wasm_limits_t* wasm_memorytype_limits(IntPtr memorytype);
+            internal static extern wasm_limits_t* wasm_memorytype_limits(IntPtr memorytype);
             #region new, copy, delete
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_memorytype_new", CallingConvention = CallingConvention.Cdecl)]
@@ -562,7 +562,7 @@ namespace Wax {
 
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_val_copy", CallingConvention = CallingConvention.Cdecl)]
-            internal static unsafe extern ulong wasm_val_copy(wasm_val_t* val, wasm_val_t* val2);
+            internal static extern ulong wasm_val_copy(wasm_val_t* val, wasm_val_t* val2);
             #endregion
             #region vec_{new,new_empty,new_uninitialized,copy,delete}
             [NotYetTested]
@@ -575,7 +575,7 @@ namespace Wax {
 
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_val_vec_new", CallingConvention = CallingConvention.Cdecl)]
-            internal static unsafe extern void wasm_val_vec_new(IntPtr @out, ulong _0, wasm_val_t* _1);
+            internal static extern void wasm_val_vec_new(IntPtr @out, ulong _0, wasm_val_t* _1);
 
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_val_vec_copy", CallingConvention = CallingConvention.Cdecl)]
@@ -849,8 +849,8 @@ namespace Wax {
             [DllImport("wasmer", EntryPoint = "wasm_func_result_arity", CallingConvention = CallingConvention.Cdecl)]
             internal static extern ulong wasm_func_result_arity(IntPtr func);
 
-            public unsafe delegate IntPtr/* trap_t */ func_callback(ref vec_t/* val_vec_t */ args, ref vec_t/* val_vec_t */ results);
-            public unsafe delegate IntPtr/* trap_t */ func_callback_with_env(void* env, ref vec_t/* val_vec_t */ args, vec_t/* val_vec_t */ results);
+            public delegate IntPtr/* trap_t */ func_callback(ref vec_t/* val_vec_t */ args, ref vec_t/* val_vec_t */ results);
+            public delegate IntPtr/* trap_t */ func_callback_with_env(void* env, ref vec_t/* val_vec_t */ args, vec_t/* val_vec_t */ results);
 
             [DllImport("wasmer", EntryPoint = "wasm_func_new", CallingConvention = CallingConvention.Cdecl)]
             internal static extern IntPtr wasm_func_new(IntPtr store, IntPtr type, IntPtr func_callback);
@@ -913,10 +913,10 @@ namespace Wax {
             internal static extern IntPtr wasm_global_type(IntPtr global);
 
             [DllImport("wasmer", EntryPoint = "wasm_global_get", CallingConvention = CallingConvention.Cdecl)]
-            internal static unsafe extern void wasm_global_get(IntPtr global, wasm_val_t* val);
+            internal static extern void wasm_global_get(IntPtr global, wasm_val_t* val);
 
             [DllImport("wasmer", EntryPoint = "wasm_global_set", CallingConvention = CallingConvention.Cdecl)]
-            internal static unsafe extern void wasm_global_set(IntPtr global, wasm_val_t* val);
+            internal static extern void wasm_global_set(IntPtr global, wasm_val_t* val);
 
             #region delete, copy, same
             [NotYetTested]
@@ -1047,7 +1047,7 @@ namespace Wax {
 
             [NotYetTested]
             [DllImport("wasmer", EntryPoint = "wasm_memory_data", CallingConvention = CallingConvention.Cdecl)]
-            internal static unsafe extern sbyte* wasm_memory_data(IntPtr _0); // TODO: AUDIT
+            internal static extern sbyte* wasm_memory_data(IntPtr _0); // TODO: AUDIT
 
             [DllImport("wasmer", EntryPoint = "wasm_memory_data_size", CallingConvention = CallingConvention.Cdecl)]
             internal static extern ulong wasm_memory_data_size(IntPtr _0);
@@ -1531,7 +1531,7 @@ namespace Wax {
         }
 
         [SuppressUnmanagedCodeSecurity]
-        internal static class __wasmer {
+        internal static unsafe class __wasmer {
             [DllImport("wasmer", EntryPoint = "wasmer_last_error_length", CallingConvention = CallingConvention.Cdecl)]
             internal static extern ulong last_error_length();
 
@@ -1568,7 +1568,7 @@ namespace Wax {
         }
 
         [SuppressUnmanagedCodeSecurity]
-        internal static class __wasi { }
+        internal static unsafe class __wasi { }
     }
     namespace Bindings { }
 }

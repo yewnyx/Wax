@@ -48,64 +48,67 @@ namespace Wax {
         [StructLayout(LayoutKind.Sequential, Size = 16)]
         public unsafe struct wasm_valtype_vec_t {
             public ulong size;
-            public IntPtr data;
+            public IntPtr data; // *
         }
 
         [StructLayout(LayoutKind.Sequential, Size = 16)]
         public unsafe struct wasm_functype_vec_t {
             public ulong size;
-            public IntPtr data;
+            public IntPtr data; // *
         }
 
         [StructLayout(LayoutKind.Sequential, Size = 16)]
         public unsafe struct wasm_globaltype_vec_t {
             public ulong size;
-            public IntPtr data;
+            public IntPtr data; // *
         }
 
         [StructLayout(LayoutKind.Sequential, Size = 16)]
         public unsafe struct wasm_tabletype_vec_t {
             public ulong size;
-            public IntPtr data;
+            public IntPtr data; // *
         }
 
         [StructLayout(LayoutKind.Sequential, Size = 16)]
         public unsafe struct wasm_memorytype_vec_t {
             public ulong size;
-            public IntPtr data;
+            public IntPtr data; // *
         }
 
         [StructLayout(LayoutKind.Sequential, Size = 16)]
         public unsafe struct wasm_externtype_vec_t {
             public ulong size;
-            public IntPtr data;
+            public IntPtr data; // *
         }
 
         [StructLayout(LayoutKind.Sequential, Size = 16)]
         public unsafe struct wasm_importtype_vec_t {
             public ulong size;
-            public IntPtr data;
+            public IntPtr data; // *
         }
 
         [StructLayout(LayoutKind.Sequential, Size = 16)]
         public unsafe struct wasm_exporttype_vec_t {
             public ulong size;
-            public IntPtr data;
+            public IntPtr data; // *
         }
+
         [StructLayout(LayoutKind.Sequential, Size = 16)]
         public unsafe struct wasm_val_vec_t {
             public ulong size;
             public IntPtr data;
         }
+
         [StructLayout(LayoutKind.Sequential, Size = 16)]
         public unsafe struct wasm_frame_vec_t {
             public ulong size;
-            public IntPtr data;
+            public IntPtr data; // *
         }
+
         [StructLayout(LayoutKind.Sequential, Size = 16)]
         public unsafe struct wasm_extern_vec_t {
             public ulong size;
-            public IntPtr data;
+            public IntPtr data; // *
         }
 
         [StructLayout(LayoutKind.Sequential, Size = 16)]
@@ -1698,7 +1701,7 @@ namespace Wax {
             #endregion
             #region Empty Vecs
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static wasm_exporttype_vec_t WASM_EMPTY_EXPORTTYPE_VEC()  {
+            public static wasm_exporttype_vec_t WASM_EMPTY_EXPORTTYPE_VEC() {
                 return new wasm_exporttype_vec_t { size = 0, data = IntPtr.Zero };
             }
 

@@ -4,13 +4,14 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 using static Wax.Paraffin.__wasm;
+using static Wax.Paraffin.__wasmer;
 
 namespace Wax.Paraffin.Examples {
     public class EarlyExitExample {
         static void print_wasmer_error() {
-            var error_len = __wasmer.last_error_length();
+            var error_len = wasmer_last_error_length();
             Span<byte> error_message = stackalloc byte[(int)error_len];
-            __wasmer.last_error_message(ref MemoryMarshal.GetReference(error_message), error_len);
+            wasmer_last_error_message(ref MemoryMarshal.GetReference(error_message), error_len);
             var error_str = Encoding.UTF8.GetString(error_message.ToArray());
             Console.Error.WriteLine(error_str.ToString());
         }

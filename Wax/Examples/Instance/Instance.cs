@@ -4,14 +4,15 @@ using System.Text;
 using Wax.Paraffin;
 
 using static Wax.Paraffin.__wasm;
+using static Wax.Paraffin.__wasmer;
 
 namespace Wax.Examples {
     // TODO: port to Wax once Wax exists
     public class InstanceExample {
         static void print_wasmer_error() {
-            var error_len = __wasmer.last_error_length();
+            var error_len = wasmer_last_error_length();
             Span<byte> error_str = stackalloc byte[(int)error_len];
-            __wasmer.last_error_message(ref MemoryMarshal.GetReference(error_str), error_len);
+            wasmer_last_error_message(ref MemoryMarshal.GetReference(error_str), error_len);
             Console.Error.WriteLine(error_str.ToString());
         }
 
@@ -29,7 +30,7 @@ namespace Wax.Examples {
             wasm_byte_vec_t wat = default;
             wasm_byte_vec_new(ref wat, (ulong)wat_string_utf8.Length, ref MemoryMarshal.GetReference(wat_string_utf8.AsSpan()));
             wasm_byte_vec_t wasm_bytes = default;
-            __wasmer.wat2wasm(ref wat, ref wasm_bytes);
+            wat2wasm(ref wat, ref wasm_bytes);
 
             Console.WriteLine("Creating the store...");
             var engine = wasm_engine_new();

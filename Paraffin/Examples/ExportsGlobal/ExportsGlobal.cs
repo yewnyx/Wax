@@ -3,13 +3,14 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 using static Wax.Paraffin.__wasm;
+using static Wax.Paraffin.__wasmer;
 
 namespace Wax.Paraffin.Examples {
     public class ExportsGlobalExample {
         static void print_wasmer_error() {
-            var error_len = __wasmer.last_error_length();
+            var error_len = wasmer_last_error_length();
             Span<byte> error_message = stackalloc byte[(int)error_len];
-            __wasmer.last_error_message(ref MemoryMarshal.GetReference(error_message), error_len);
+            wasmer_last_error_message(ref MemoryMarshal.GetReference(error_message), error_len);
             var error_str = Encoding.UTF8.GetString(error_message.ToArray());
             Console.Error.WriteLine(error_str.ToString());
         }
@@ -27,7 +28,7 @@ namespace Wax.Paraffin.Examples {
             wasm_byte_vec_t wat = default;
             wasm_byte_vec_new(ref wat, (ulong)wat_string_utf8.Length, ref MemoryMarshal.GetReference(wat_string_utf8.AsSpan()));
             wasm_byte_vec_t wasm_bytes = default;
-            __wasmer.wat2wasm(ref wat, ref wasm_bytes);
+            wat2wasm(ref wat, ref wasm_bytes);
             wasm_byte_vec_delete(ref wat);
 
             Console.WriteLine("Creating the store...");
@@ -113,10 +114,10 @@ namespace Wax.Paraffin.Examples {
             var one_set_value = WASM_F32_VAL(42);
             unsafe { wasm_global_set(one, &one_set_value); }
 
-            var error_length = __wasmer.last_error_length();
+            var error_length = wasmer_last_error_length();
             if (error_length > 0) {
                 Span<byte> error_message = stackalloc byte[(int)error_length];
-                __wasmer.last_error_message(ref MemoryMarshal.GetReference(error_message), error_length);
+                wasmer_last_error_message(ref MemoryMarshal.GetReference(error_message), error_length);
                 var error_str = Encoding.UTF8.GetString(error_message.ToArray());
                 Console.WriteLine($"Attempted to set an immutable global: `{error_str}`");
             }

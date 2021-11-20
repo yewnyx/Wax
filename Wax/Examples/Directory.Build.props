@@ -8,5 +8,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Wax\Wax.csproj" />
+    <ProjectReference Include="..\..\WaxWasmer\WaxWasmer.csproj" />
   </ItemGroup>
 </Project>

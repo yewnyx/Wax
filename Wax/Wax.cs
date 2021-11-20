@@ -1354,7 +1354,6 @@ namespace Wax {
             public static extern IntPtr wasm_ref_as_instance_const(IntPtr @ref);
             #endregion
             #endregion
-            #region Val helpers
             #region Valtype helpers
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static IntPtr wasm_valtype_new_i32() {
@@ -1545,7 +1544,7 @@ namespace Wax {
                 Span</* valtype_t* */IntPtr> ps = stackalloc IntPtr[1] { p };
                 Span</* valtype_t* */IntPtr> rs = stackalloc IntPtr[2] { r1, r2 };
 
-                wasm_valtype_vec_t  @params = default;
+                wasm_valtype_vec_t @params = default;
                 wasm_valtype_vec_new(ref @params, (ulong)ps.Length, ref MemoryMarshal.GetReference(ps));
 
                 wasm_valtype_vec_t results = default;
@@ -1591,6 +1590,171 @@ namespace Wax {
                 wasm_valtype_vec_new(ref results, (ulong)rs.Length, ref MemoryMarshal.GetReference(rs));
 
                 return wasm_functype_new(ref @params, ref results);
+            }
+            #endregion
+            #region Val helpers
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static void wasm_val_init_ptr(ref wasm_val_t @out, IntPtr p) {
+                // I don't care about 32-bit, but here's where you'd fix the conditional if you wanted to.
+#if false
+                @out.kind = (byte)wasm_valkind_enum.I32;
+                @out.of.i64 = p.ToInt32();
+#else
+                @out.kind = (byte)wasm_valkind_enum.I64;
+                @out.of.i64 = p.ToInt64();
+#endif
+            }
+
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static IntPtr wasm_val_ptr(ref wasm_val_t val) {
+#if false
+                return (IntPtr)val.of.i32;
+#else
+                return (IntPtr)val.of.i64;
+#endif
+            }
+
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_val_t WASM_I32_VAL(int i) {
+                return new wasm_val_t {
+                    kind = (byte)wasm_valkind_enum.I32,
+                    of = new wasm_val_t.val_union { i32 = i }
+                };
+            }
+
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_val_t WASM_I64_VAL(long i) {
+                return new wasm_val_t {
+                    kind = (byte)wasm_valkind_enum.I64,
+                    of = new wasm_val_t.val_union { i64 = i }
+                };
+            }
+
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_val_t WASM_F32_VAL(float z) {
+                return new wasm_val_t {
+                    kind = (byte)wasm_valkind_enum.F32,
+                    of = new wasm_val_t.val_union { f32 = z }
+                };
+            }
+
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_val_t WASM_F64_VAL(double z) {
+                return new wasm_val_t {
+                    kind = (byte)wasm_valkind_enum.F64,
+                    of = new wasm_val_t.val_union { f64 = z }
+                };
+            }
+
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_val_t WASM_REF_VAL(IntPtr r) {
+                return new wasm_val_t {
+                    kind = (byte)wasm_valkind_enum.ANYREF,
+                    of = new wasm_val_t.val_union { @ref = r }
+                };
+            }
+
+            [NotYetTested]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_val_t WASM_INIT_VAL() {
+                return new wasm_val_t {
+                    kind = (byte)wasm_valkind_enum.ANYREF,
+                    of = new wasm_val_t.val_union { @ref = IntPtr.Zero }
+                };
+            }
+            #endregion
+            #region Vec helpers
+            #region Array initializers (Add as needed)
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_val_vec_t WASM_ARRAY_VEC(Span<wasm_val_t> span) {
+                wasm_val_vec_t vec = default;
+                vec.size = (ulong)span.Length;
+                unsafe {
+                    fixed (void* arg0 = &span[0]) {
+                        vec.data = (IntPtr)arg0;
+                    }
+                }
+                return vec;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_extern_vec_t WASM_ARRAY_EXTERN_VEC(Span<IntPtr> span) {
+                wasm_extern_vec_t vec = default;
+                vec.size = (ulong)span.Length;
+                unsafe {
+                    fixed (void* arg0 = &span[0]) {
+                        vec.data = (IntPtr)arg0;
+                    }
+                }
+                return vec;
+            }
+            #endregion
+            #region Empty Vecs
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_exporttype_vec_t WASM_EMPTY_EXPORTTYPE_VEC()  {
+                return new wasm_exporttype_vec_t { size = 0, data = IntPtr.Zero };
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_extern_vec_t WASM_EMPTY_EXTERN_VEC() {
+                return new wasm_extern_vec_t { size = 0, data = IntPtr.Zero };
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_externtype_vec_t WASM_EMPTY_EXTERNTYPE_VEC() {
+                return new wasm_externtype_vec_t { size = 0, data = IntPtr.Zero };
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_frame_vec_t WASM_EMPTY_FRAME_VEC() {
+                return new wasm_frame_vec_t { size = 0, data = IntPtr.Zero };
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_functype_vec_t WASM_EMPTY_FUNCTYPE_VEC() {
+                return new wasm_functype_vec_t { size = 0, data = IntPtr.Zero };
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_globaltype_vec_t WASM_EMPTY_GLOBALTYPE_VEC() {
+                return new wasm_globaltype_vec_t { size = 0, data = IntPtr.Zero };
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_importtype_vec_t WASM_EMPTY_IMPORTTYPE_VEC() {
+                return new wasm_importtype_vec_t { size = 0, data = IntPtr.Zero };
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_memorytype_vec_t WASM_EMPTY_MEMORYTYPE_VEC() {
+                return new wasm_memorytype_vec_t { size = 0, data = IntPtr.Zero };
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_tabletype_vec_t WASM_EMPTY_TABLETYPE_VEC() {
+                return new wasm_tabletype_vec_t { size = 0, data = IntPtr.Zero };
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_val_vec_t WASM_EMPTY_VAL_VEC() {
+                return new wasm_val_vec_t { size = 0, data = IntPtr.Zero };
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_valtype_vec_t WASM_EMPTY_VEC_VALTYPE() {
+                return new wasm_valtype_vec_t { size = 0, data = IntPtr.Zero };
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static wasm_byte_vec_t WASM_EMPTY_BYTE_VEC() {
+                return new wasm_byte_vec_t { size = 0, data = IntPtr.Zero };
             }
             #endregion
             #endregion

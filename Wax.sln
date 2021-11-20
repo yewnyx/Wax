@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31829.152
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wax", "Wax\Wax.csproj", "{7B95002F-923E-473D-B700-30D989C96C71}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImportExport", "Examples\ImportExport\ImportExport.csproj", "{2F122D94-F564-40F1-824A-E5052AF6CF56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImportsExports", "Examples\ImportsExports\ImportsExports.csproj", "{2F122D94-F564-40F1-824A-E5052AF6CF56}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Instance", "Examples\Instance\Instance.csproj", "{87227F14-5B7B-4E7E-8EEF-8D7ED80A004E}"
 EndProject

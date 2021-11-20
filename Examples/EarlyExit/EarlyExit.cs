@@ -36,7 +36,7 @@ namespace Wax.Examples {
             return trap;
         }
 
-        public static void Main(string[] args) {
+        public static void Main(string[] argv) {
             Console.WriteLine("Initializing...");
             var engine = wasm_engine_new();
             store = wasm_store_new(engine);
@@ -72,17 +72,9 @@ namespace Wax.Examples {
 
             //wasm_extern_vec_t imports = default;
             // NOTE: Modified from extern_vec_new_uninitialized in C source.
-            // Fix after doing a pointer style pass on the code
+            // Fix after doing a pointer type pass on the code (i.e. SafeHandleZeroOrMinusOneIsInvalid)
             //extern_vec_new_uninitialized(ref imports, 1);
-
-            Span<IntPtr> imports_span = stackalloc IntPtr[1] { wasm_func_as_extern(host_func) };
-            wasm_extern_vec_t imports = default;
-            imports.size = (ulong)imports_span.Length;
-            unsafe {
-                fixed (void* arg0 = &imports_span[0]) {
-                    imports.data = (IntPtr)arg0;
-                }
-            }
+            wasm_extern_vec_t imports = WASM_ARRAY_EXTERN_VEC(stackalloc IntPtr[1] { wasm_func_as_extern(host_func) });
 
             var instance = wasm_instance_new(store, module, ref imports, IntPtr.Zero);
             if (instance == null) {
@@ -116,31 +108,15 @@ namespace Wax.Examples {
             }
 
             Console.WriteLine("Calling export...");
-            Span<wasm_val_t> args_val = stackalloc wasm_val_t[2] {
-                new wasm_val_t { kind = (byte)wasm_valkind_enum.I32, of = { i32 = 1 } },
-                new wasm_val_t { kind = (byte)wasm_valkind_enum.I32, of = { i32 = 7 } },
+            Span<wasm_val_t> values = stackalloc wasm_val_t[2] {
+                WASM_I32_VAL(1),
+                WASM_I32_VAL(7),
             };
-            Span<wasm_val_t> results_val = stackalloc wasm_val_t[1] {
-                new wasm_val_t { kind = (byte)wasm_valkind_enum.ANYREF, of = { @ref = IntPtr.Zero } },
-            };
+            wasm_val_vec_t args = WASM_ARRAY_VEC(values);
+            Span<wasm_val_t> result = stackalloc wasm_val_t[1] { WASM_INIT_VAL() };
+            wasm_val_vec_t rets = WASM_ARRAY_VEC(result);
 
-            wasm_val_vec_t args_vec = default;
-            args_vec.size = (ulong)args_val.Length;
-            unsafe {
-                fixed (void* arg0 = &args_val[0]) {
-                    args_vec.data = (IntPtr)arg0;
-                }
-            }
-
-            wasm_val_vec_t results_vec = default;
-            results_vec.size = (ulong)results_val.Length;
-            unsafe {
-                fixed (void* result0 = &results_val[0]) {
-                    results_vec.data = (IntPtr)result0;
-                }
-            }
-
-            var trap = wasm_func_call(run_func, ref args_vec, ref results_vec);
+            var trap = wasm_func_call(run_func, ref args, ref rets);
             if (trap == IntPtr.Zero) {
                 Console.Error.WriteLine("> Error calling function: expected trap!");
                 print_wasmer_error();

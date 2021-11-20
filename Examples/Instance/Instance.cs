@@ -14,7 +14,7 @@ namespace Wax.Examples {
             Console.Error.WriteLine(error_str.ToString());
         }
 
-        public static void Main(string[] args) {
+        public static void Main(string[] argv) {
             var wat_string = @"
 (module
   (type $add_one_t (func (param i32) (result i32)))
@@ -79,30 +79,12 @@ namespace Wax.Examples {
             wasm_instance_delete(instance);
 
             Console.WriteLine("Calling `add_one` function...");
-            Span<wasm_val_t> args_val = stackalloc wasm_val_t[1] {
-                new wasm_val_t { kind = (byte)wasm_valkind_enum.I32, of = { i32 = 1 } },
-            };
-            Span<wasm_val_t> results_val = stackalloc wasm_val_t[1] {
-                new wasm_val_t { kind = (byte)wasm_valkind_enum.ANYREF, of = { @ref = IntPtr.Zero } },
-            };
+            Span<wasm_val_t> args_val = stackalloc wasm_val_t[1] { WASM_I32_VAL(1) };
+            Span<wasm_val_t> results_val = stackalloc wasm_val_t[1] { WASM_INIT_VAL() };
+            wasm_val_vec_t args = WASM_ARRAY_VEC(args_val);
+            wasm_val_vec_t results = WASM_ARRAY_VEC(results_val);
 
-            wasm_val_vec_t args_vec = default;
-            args_vec.size = (ulong)args_val.Length;
-            unsafe {
-                fixed (void* arg0 = &args_val[0]) {
-                    args_vec.data = (IntPtr)arg0;
-                }
-            }
-
-            wasm_val_vec_t results_vec = default;
-            results_vec.size = (ulong)results_val.Length;
-            unsafe {
-                fixed (void* result0 = &results_val[0]) {
-                    results_vec.data = (IntPtr)result0;
-                }
-            }
-
-            if (wasm_func_call(add_one_func, ref args_vec, ref results_vec) != IntPtr.Zero) {
+            if (wasm_func_call(add_one_func, ref args, ref results) != IntPtr.Zero) {
                 Console.Error.WriteLine("> Error calling function!");
                 print_wasmer_error();
                 Environment.Exit(1);

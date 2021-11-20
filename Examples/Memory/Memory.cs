@@ -55,11 +55,10 @@ namespace Wax.Examples {
             wasm_byte_vec_delete(ref wasm_bytes);
 
             Console.WriteLine("Creating imports...");
-            wasm_extern_vec_t imports = default;
-            wasm_extern_vec_new_empty(ref imports);
+            wasm_extern_vec_t import_object = WASM_EMPTY_EXTERN_VEC();
 
             Console.WriteLine("Instantiating module...");
-            var instance = wasm_instance_new(store, module, ref imports, IntPtr.Zero);
+            var instance = wasm_instance_new(store, module, ref import_object, IntPtr.Zero);
             if (instance == null) {
                 Console.Error.WriteLine("> Error instantiating module!");
                 print_wasmer_error();
@@ -105,47 +104,17 @@ namespace Wax.Examples {
             int val = 0xFEFEFFE;
 
             Span<wasm_val_t> set_at_args_val = stackalloc wasm_val_t[2] {
-                new wasm_val_t { kind = (byte)wasm_valkind_enum.I32, of = { i32 = mem_addr } },
-                new wasm_val_t { kind = (byte)wasm_valkind_enum.I32, of = { i32 = val } },
+                WASM_I32_VAL(mem_addr),
+                WASM_I32_VAL(val),
             };
-
-            wasm_val_vec_t set_at_args = default;
-            set_at_args.size = (ulong)set_at_args_val.Length;
-            unsafe {
-                fixed (void* arg0 = &set_at_args_val[0]) {
-                    set_at_args.data = (IntPtr)arg0;
-                }
-            }
-
-            wasm_val_vec_t set_at_results = default;
-            wasm_val_vec_new_empty(ref set_at_results);
-
+            wasm_val_vec_t set_at_args = WASM_ARRAY_VEC(set_at_args_val);
+            wasm_val_vec_t set_at_results = WASM_EMPTY_VAL_VEC();
             wasm_func_call(set_at, ref set_at_args, ref set_at_results);
 
-            Span<wasm_val_t> get_at_args_val = stackalloc wasm_val_t[1] {
-                new wasm_val_t { kind = (byte)wasm_valkind_enum.I32, of = { i32 = mem_addr } },
-            };
-
-            wasm_val_vec_t get_at_args = default;
-            get_at_args.size = (ulong)get_at_args_val.Length;
-            unsafe {
-                fixed (void* arg0 = &get_at_args_val[0]) {
-                    get_at_args.data = (IntPtr)arg0;
-                }
-            }
-
-            Span<wasm_val_t> get_at_results_val = stackalloc wasm_val_t[1] {
-                new wasm_val_t { kind = (byte)wasm_valkind_enum.ANYREF, of = { @ref = IntPtr.Zero } },
-            };
-
-            wasm_val_vec_t get_at_results = default;
-            get_at_results.size = (ulong)get_at_results_val.Length;
-            unsafe {
-                fixed (void* arg0 = &get_at_results_val[0]) {
-                    get_at_results.data = (IntPtr)arg0;
-                }
-            }
-
+            Span<wasm_val_t> get_at_args_val = stackalloc wasm_val_t[1] { WASM_I32_VAL(mem_addr) };
+            wasm_val_vec_t get_at_args = WASM_ARRAY_VEC(get_at_args_val);
+            Span<wasm_val_t> get_at_results_val = stackalloc wasm_val_t[1] { WASM_INIT_VAL(), };
+            wasm_val_vec_t get_at_results = WASM_ARRAY_VEC(get_at_results_val);
             wasm_func_call(get_at, ref get_at_args, ref get_at_results);
 
             Console.WriteLine($"Value at {mem_addr:X}: {get_at_results_val[0].of.i32:X}");

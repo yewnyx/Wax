@@ -6,7 +6,7 @@ using Wax.Imports;
 using static Wax.Imports.__wasm;
 
 namespace Wax.Examples {
-    public class ImportExportExample {
+    public class ImportsExportsExample {
         static void print_wasmer_error() {
             var error_len = __wasmer.last_error_length();
             Span<byte> error_message = stackalloc byte[(int)error_len];
@@ -19,7 +19,7 @@ namespace Wax.Examples {
             Console.WriteLine("Calling back...");
             Console.Write("> ");
 
-            var val = new wasm_val_t { kind = (byte)wasm_valkind_enum.I32, of = { i32 = 42 } };
+            var val = WASM_I32_VAL(42);
             unsafe { wasm_val_copy((wasm_val_t*)results.data, &val); }
             wasm_val_delete(ref val);
 
@@ -66,22 +66,16 @@ namespace Wax.Examples {
 
             Console.WriteLine("Creating the imported global...");
             var host_global_type = wasm_globaltype_new(wasm_valtype_new_f32(), (byte)wasm_mutability_enum.CONST);
-            var host_global_val = new wasm_val_t { kind = (byte)wasm_valkind_enum.I32, of = { i32 = 42 } };
+            var host_global_val = WASM_I32_VAL(42);
             var host_global = wasm_global_new(store, host_global_type, ref host_global_val);
             wasm_globaltype_delete(host_global_type);
 
-            Span<IntPtr> imports = stackalloc IntPtr[2] {
+            Span<IntPtr> externs = stackalloc IntPtr[2] {
                 wasm_func_as_extern(host_func),
                 wasm_global_as_extern(host_global),
             };
 
-            wasm_extern_vec_t import_object = default;
-            import_object.size = (ulong)imports.Length;
-            unsafe {
-                fixed (void* arg0 = &imports[0]) {
-                    import_object.data = (IntPtr)arg0;
-                }
-            }
+            wasm_extern_vec_t import_object = WASM_ARRAY_EXTERN_VEC(externs);
 
             Console.WriteLine("Instantiating module...");
             var instance = wasm_instance_new(store, module, ref import_object, IntPtr.Zero);

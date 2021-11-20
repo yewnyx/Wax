@@ -46,11 +46,10 @@ namespace Wax.Examples {
             wasm_byte_vec_delete(ref wasm_bytes);
 
             Console.WriteLine("Creating imports...");
-            wasm_extern_vec_t imports = default;
-            wasm_extern_vec_new_empty(ref imports);
+            wasm_extern_vec_t import_object = WASM_EMPTY_EXTERN_VEC();
 
             Console.WriteLine("Instantiating module...");
-            var instance = wasm_instance_new(store, module, ref imports, IntPtr.Zero);
+            var instance = wasm_instance_new(store, module, ref import_object, IntPtr.Zero);
             if (instance == null) {
                 Console.Error.WriteLine("> Error instantiating module!");
                 print_wasmer_error();
@@ -112,7 +111,7 @@ namespace Wax.Examples {
             Console.WriteLine($"`some` value: {some_value.of.f32}");
 
             Console.WriteLine("Setting global values...\n");
-            var one_set_value = new wasm_val_t { kind = (byte)wasm_valkind_enum.F32, of = { f32 = 42 } };
+            var one_set_value = WASM_F32_VAL(42);
             unsafe { wasm_global_set(one, &one_set_value); }
 
             var error_length = __wasmer.last_error_length();
@@ -123,7 +122,7 @@ namespace Wax.Examples {
                 Console.WriteLine($"Attempted to set an immutable global: `{error_str}`");
             }
 
-            var some_set_value = new wasm_val_t { kind = (byte)wasm_valkind_enum.F32, of = { f32 = 21 } };
+            var some_set_value = WASM_F32_VAL(21);
             unsafe { wasm_global_set(some, &some_set_value); }
 
             // I think this is a bug in the C example and it means to either

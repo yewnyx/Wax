@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <StartupObject>Wax.Examples.ImportExportExample</StartupObject>
+    <StartupObject>Wax.Examples.ImportsExportsExample</StartupObject>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>

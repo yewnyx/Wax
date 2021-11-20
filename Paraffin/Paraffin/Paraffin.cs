@@ -6,7 +6,7 @@ using System.Security;
 // TODO: Audit vec_new(..., ref /* ... */IntPtr array) function signatures for correctness
 
 namespace Wax {
-    namespace Imports {
+    namespace Paraffin {
         [System.AttributeUsage(System.AttributeTargets.Method)]
         class NotYetTestedAttribute : Attribute { }
 

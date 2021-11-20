@@ -2,11 +2,10 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using Wax.Imports;
 
-using static Wax.Imports.__wasm;
+using static Wax.Paraffin.__wasm;
 
-namespace Wax.Examples {
+namespace Wax.Paraffin.Examples {
     public class EarlyExitExample {
         static void print_wasmer_error() {
             var error_len = __wasmer.last_error_length();

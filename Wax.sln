@@ -3,22 +3,34 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31829.152
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wax", "Wax\Wax.csproj", "{7B95002F-923E-473D-B700-30D989C96C71}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImportsExports", "Examples\ImportsExports\ImportsExports.csproj", "{2F122D94-F564-40F1-824A-E5052AF6CF56}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Instance", "Examples\Instance\Instance.csproj", "{87227F14-5B7B-4E7E-8EEF-8D7ED80A004E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExportsGlobal", "Examples\ExportsGlobal\ExportsGlobal.csproj", "{D254961F-B6E8-4813-B19B-39C80E6D11F0}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Memory", "Examples\Memory\Memory.csproj", "{3DEAA31B-9DA3-4EAF-A5F6-5444AAAF51E1}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7548BD75-3DC8-4DE5-9A41-0A74A3C8CF58}"
 	ProjectSection(SolutionItems) = preProject
 		wasmer.dll = wasmer.dll
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EarlyExit", "Examples\EarlyExit\EarlyExit.csproj", "{5C04A0BD-C8BE-4965-8B24-998791D6E388}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Paraffin", "Paraffin\Paraffin\Paraffin.csproj", "{7B95002F-923E-473D-B700-30D989C96C71}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImportsExports", "Paraffin\Examples\ImportsExports\ImportsExports.csproj", "{2F122D94-F564-40F1-824A-E5052AF6CF56}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Instance", "Paraffin\Examples\Instance\Instance.csproj", "{87227F14-5B7B-4E7E-8EEF-8D7ED80A004E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExportsGlobal", "Paraffin\Examples\ExportsGlobal\ExportsGlobal.csproj", "{D254961F-B6E8-4813-B19B-39C80E6D11F0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Memory", "Paraffin\Examples\Memory\Memory.csproj", "{3DEAA31B-9DA3-4EAF-A5F6-5444AAAF51E1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EarlyExit", "Paraffin\Examples\EarlyExit\EarlyExit.csproj", "{5C04A0BD-C8BE-4965-8B24-998791D6E388}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{4BE9F193-3AD5-4980-9B0D-3FB1619B866C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Paraffin", "Paraffin", "{FB3209E6-73DE-4CF4-A6AC-F046645F87BE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wax", "Wax", "{80C8C1CA-CE47-4D3A-AC34-9C4F12C18837}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wax", "Wax\Wax\Wax.csproj", "{73E93DCE-42B1-4B2A-9823-75B9BCDE5FD8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{522C3F51-5AEC-49D8-808D-04468CE794AE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Instance", "Wax\Examples\Instance\Instance.csproj", "{18BCB380-D471-4D59-802C-A54528EE2D5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -76,9 +88,37 @@ Global
 		{5C04A0BD-C8BE-4965-8B24-998791D6E388}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5C04A0BD-C8BE-4965-8B24-998791D6E388}.Release|x64.ActiveCfg = Release|Any CPU
 		{5C04A0BD-C8BE-4965-8B24-998791D6E388}.Release|x64.Build.0 = Release|Any CPU
+		{73E93DCE-42B1-4B2A-9823-75B9BCDE5FD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73E93DCE-42B1-4B2A-9823-75B9BCDE5FD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73E93DCE-42B1-4B2A-9823-75B9BCDE5FD8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{73E93DCE-42B1-4B2A-9823-75B9BCDE5FD8}.Debug|x64.Build.0 = Debug|Any CPU
+		{73E93DCE-42B1-4B2A-9823-75B9BCDE5FD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73E93DCE-42B1-4B2A-9823-75B9BCDE5FD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73E93DCE-42B1-4B2A-9823-75B9BCDE5FD8}.Release|x64.ActiveCfg = Release|Any CPU
+		{73E93DCE-42B1-4B2A-9823-75B9BCDE5FD8}.Release|x64.Build.0 = Release|Any CPU
+		{18BCB380-D471-4D59-802C-A54528EE2D5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18BCB380-D471-4D59-802C-A54528EE2D5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18BCB380-D471-4D59-802C-A54528EE2D5A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{18BCB380-D471-4D59-802C-A54528EE2D5A}.Debug|x64.Build.0 = Debug|Any CPU
+		{18BCB380-D471-4D59-802C-A54528EE2D5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18BCB380-D471-4D59-802C-A54528EE2D5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18BCB380-D471-4D59-802C-A54528EE2D5A}.Release|x64.ActiveCfg = Release|Any CPU
+		{18BCB380-D471-4D59-802C-A54528EE2D5A}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7B95002F-923E-473D-B700-30D989C96C71} = {FB3209E6-73DE-4CF4-A6AC-F046645F87BE}
+		{2F122D94-F564-40F1-824A-E5052AF6CF56} = {4BE9F193-3AD5-4980-9B0D-3FB1619B866C}
+		{87227F14-5B7B-4E7E-8EEF-8D7ED80A004E} = {4BE9F193-3AD5-4980-9B0D-3FB1619B866C}
+		{D254961F-B6E8-4813-B19B-39C80E6D11F0} = {4BE9F193-3AD5-4980-9B0D-3FB1619B866C}
+		{3DEAA31B-9DA3-4EAF-A5F6-5444AAAF51E1} = {4BE9F193-3AD5-4980-9B0D-3FB1619B866C}
+		{5C04A0BD-C8BE-4965-8B24-998791D6E388} = {4BE9F193-3AD5-4980-9B0D-3FB1619B866C}
+		{4BE9F193-3AD5-4980-9B0D-3FB1619B866C} = {FB3209E6-73DE-4CF4-A6AC-F046645F87BE}
+		{73E93DCE-42B1-4B2A-9823-75B9BCDE5FD8} = {80C8C1CA-CE47-4D3A-AC34-9C4F12C18837}
+		{522C3F51-5AEC-49D8-808D-04468CE794AE} = {80C8C1CA-CE47-4D3A-AC34-9C4F12C18837}
+		{18BCB380-D471-4D59-802C-A54528EE2D5A} = {522C3F51-5AEC-49D8-808D-04468CE794AE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {21325575-2070-469B-8C31-FCB1B967D179}

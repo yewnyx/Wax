@@ -1,0 +1,3 @@
+﻿namespace Wax {
+    namespace Bindings { }
+}

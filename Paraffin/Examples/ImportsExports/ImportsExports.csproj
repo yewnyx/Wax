@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <StartupObject>Wax.Examples.ExportsGlobalExample</StartupObject>
+    <StartupObject>Wax.Paraffin.Examples.ImportsExportsExample</StartupObject>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="..\..\wasmer.dll" Link="wasmer.dll">
+    <None Include="..\..\..\wasmer.dll" Link="wasmer.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

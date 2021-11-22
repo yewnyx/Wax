@@ -6,8 +6,21 @@ using Wax.Paraffin;
 using static Wax.Paraffin.__wasm;
 
 namespace Wax {
-    public sealed class WasmByteVec {
+    // Boxes, fix?
+    public interface IWasmConfig : IDisposable {
+        // USE EXTERNALLY AT YOUR OWN RISK
+        unsafe ref IntPtr RawPointer { get; }
+    }
+
+    public interface IWasmObject : IDisposable {
+    }
+
+    public sealed class WasmExtern { }
+    public sealed class WasmFunc { }
+
+    public sealed class WasmByteVec : IWasmObject {
         private wasm_byte_vec_t _vec;
+        private int disposedValue;
 
         // USE EXTERNALLY AT YOUR OWN RISK
         public unsafe ref wasm_byte_vec_t RawVec => ref _vec;
@@ -48,13 +61,26 @@ namespace Wax {
             return new WasmByteVec(vec);
         }
 
+        private void Dispose(bool disposing) {
+            if (Interlocked.Exchange(ref disposedValue, 1) == 0) {
+                Console.WriteLine("Disposing byte vec");
+                wasm_byte_vec_delete(ref _vec);
+            }
+        }
+
+        ~WasmByteVec() {
+            Dispose(disposing: false);
+        }
+
         public void Dispose() {
-            wasm_byte_vec_delete(ref _vec);
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 
-    public sealed class WasmExternVec {
+    public sealed class WasmExternVec : IWasmObject {
         private wasm_extern_vec_t _vec;
+        private int disposedValue;
 
         // USE EXTERNALLY AT YOUR OWN RISK
         public unsafe ref wasm_extern_vec_t RawVec => ref _vec;
@@ -77,7 +103,7 @@ namespace Wax {
             wasm_extern_vec_copy(ref RawVec, ref vec.RawVec);
         }
 
-        internal WasmExternVec() {}
+        internal WasmExternVec() { }
 
         public static WasmExternVec New(ReadOnlySpan<IntPtr> list) {
             return new WasmExternVec(list);
@@ -95,17 +121,26 @@ namespace Wax {
             return new WasmExternVec(vec);
         }
 
+#pragma warning disable IDE0060 // Remove unused parameter
+        private void Dispose(bool disposing) {
+            if (Interlocked.Exchange(ref disposedValue, 1) == 0) {
+                Console.WriteLine("Disposing extern vec");
+                wasm_extern_vec_delete(ref _vec);
+            }
+        }
+#pragma warning restore IDE0060 // Remove unused parameter
+
+        ~WasmExternVec() {
+            Dispose(disposing: false);
+        }
+
         public void Dispose() {
-            wasm_extern_vec_delete(ref _vec);
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 
-    public interface IWasmConfig : IDisposable {
-        // USE EXTERNALLY AT YOUR OWN RISK
-        unsafe ref IntPtr RawPointer { get; }
-    }
-
-    public sealed class WasmEngine : IDisposable {
+    public sealed class WasmEngine : IWasmObject {
         #region Memory management
         private IntPtr _rawPointer;
 
@@ -140,17 +175,29 @@ namespace Wax {
             }
         }
 
-        public void Dispose() {
+#pragma warning disable IDE0060 // Remove unused parameter
+        private void Dispose(bool disposing) {
             IntPtr saved = Interlocked.Exchange(ref _rawPointer, IntPtr.Zero);
             if (saved != IntPtr.Zero) {
                 ptrToStruct.TryRemove(saved, out _);
+                Console.WriteLine("Disposing engine");
                 wasm_engine_delete(saved);
             }
+        }
+#pragma warning restore IDE0060 // Remove unused parameter
+
+        ~WasmEngine() {
+            Dispose(disposing: false);
+        }
+
+        public void Dispose() {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
         #endregion
     }
 
-    public sealed class WasmStore : IDisposable {
+    public sealed class WasmStore : IWasmObject {
         #region Memory management
         private IntPtr _rawPointer;
 
@@ -179,17 +226,29 @@ namespace Wax {
             }
         }
 
-        public void Dispose() {
+#pragma warning disable IDE0060 // Remove unused parameter
+        private void Dispose(bool disposing) {
             IntPtr saved = Interlocked.Exchange(ref _rawPointer, IntPtr.Zero);
             if (saved != IntPtr.Zero) {
                 ptrToStruct.TryRemove(saved, out _);
+                Console.WriteLine("Disposing store");
                 wasm_store_delete(saved);
             }
+        }
+#pragma warning restore IDE0060 // Remove unused parameter
+
+        ~WasmStore() {
+            Dispose(disposing: false);
+        }
+
+        public void Dispose() {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
         #endregion
     }
 
-    public sealed class WasmModule : IDisposable {
+    public sealed class WasmModule : IWasmObject {
         #region Memory management
         private IntPtr _rawPointer;
 
@@ -218,17 +277,27 @@ namespace Wax {
             }
         }
 
-        public void Dispose() {
+        private void Dispose(bool disposing) {
             IntPtr saved = Interlocked.Exchange(ref _rawPointer, IntPtr.Zero);
             if (saved != IntPtr.Zero) {
                 ptrToStruct.TryRemove(saved, out _);
+                Console.WriteLine("Disposing module");
                 wasm_module_delete(saved);
             }
+        }
+
+        ~WasmModule() {
+            Dispose(disposing: false);
+        }
+
+        public void Dispose() {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
         #endregion
     }
 
-    public sealed class WasmInstance : IDisposable {
+    public sealed class WasmInstance : IWasmObject {
         #region Memory management
         private IntPtr _rawPointer;
 
@@ -260,12 +329,24 @@ namespace Wax {
             }
         }
 
-        public void Dispose() {
+#pragma warning disable IDE0060 // Remove unused parameter
+        private void Dispose(bool disposing) {
             IntPtr saved = Interlocked.Exchange(ref _rawPointer, IntPtr.Zero);
             if (saved != IntPtr.Zero) {
                 ptrToStruct.TryRemove(saved, out _);
+                Console.WriteLine("Disposing instance");
                 wasm_instance_delete(saved);
             }
+        }
+#pragma warning restore IDE0060 // Remove unused parameter
+
+        ~WasmInstance() {
+            Dispose(disposing: false);
+        }
+
+        public void Dispose() {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
         #endregion
 

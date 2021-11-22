@@ -43,8 +43,6 @@ namespace Wax.Examples {
                 Environment.Exit(1);
             }
 
-            wat.Dispose();
-
             Console.WriteLine("Creating imports...");
             var imports = WasmExternVec.New();
 
@@ -77,9 +75,6 @@ namespace Wax.Examples {
                 }
             }
 
-            module.Dispose();
-            instance.Dispose();
-
             Console.WriteLine("Calling `add_one` function...");
             Span<wasm_val_t> args_val = stackalloc wasm_val_t[1] { WASM_I32_VAL(1) };
             Span<wasm_val_t> results_val = stackalloc wasm_val_t[1] { WASM_INIT_VAL() };
@@ -93,10 +88,6 @@ namespace Wax.Examples {
             }
 
             Console.WriteLine($"Results of `add_one`: {results_val[0].of.i32}");
-
-            exports.Dispose();
-            store.Dispose();
-            engine.Dispose();
         }
     }
 }

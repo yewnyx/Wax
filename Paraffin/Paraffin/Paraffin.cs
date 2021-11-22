@@ -1309,7 +1309,7 @@ namespace Wax {
             #endregion
             #region Instance
             [DllImport(WASM_LIB, EntryPoint = "wasm_instance_new", CallingConvention = CallingConvention.Cdecl)]
-            public static extern IntPtr wasm_instance_new(IntPtr store, IntPtr module, ref wasm_extern_vec_t imports, IntPtr _/* TODO: trap** */);
+            public static extern IntPtr wasm_instance_new(IntPtr store, IntPtr module, ref wasm_extern_vec_t imports, ref IntPtr trap);
 
             [DllImport(WASM_LIB, EntryPoint = "wasm_instance_exports", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr wasm_instance_exports(IntPtr instance, ref wasm_extern_vec_t exports);

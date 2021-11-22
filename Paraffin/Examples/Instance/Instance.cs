@@ -48,7 +48,7 @@ namespace Wax.Paraffin.Examples {
             wasm_extern_vec_t imports = default;
 
             Console.WriteLine("Instantiating module...");
-            var instance = wasm_instance_new(store, module, ref imports, IntPtr.Zero);
+            var instance = wasm_instance_new(store, module, ref imports, ref MemoryMarshal.GetReference(stackalloc IntPtr[1] { IntPtr.Zero}));
             if (instance == null) {
                 Console.Error.WriteLine("> Error instantiating module!");
                 print_wasmer_error();

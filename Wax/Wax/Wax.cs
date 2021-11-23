@@ -12,13 +12,103 @@ namespace Wax {
         unsafe ref IntPtr RawPointer { get; }
     }
 
-    public interface IWasmObject : IDisposable {
+    public interface IWasmObject : IDisposable { }
+
+    public sealed class WasmExtern : IWasmObject {
+        #region Memory management
+        internal IWasmObject? _owner;
+
+        private IntPtr _rawPointer;
+        private int _disposedValue;
+
+        private WasmExtern(IntPtr rawPointer) {
+            _rawPointer = rawPointer;
+        }
+
+        private WasmExtern(WasmExtern original) {
+            _rawPointer = wasm_extern_copy(original._rawPointer);
+        }
+
+        internal WasmExtern() { }
+
+        internal static WasmExtern Wrap(IntPtr rawPointer) {
+            return new WasmExtern(rawPointer);
+        }
+
+        public static WasmExtern New(WasmExtern original) {
+            return new WasmExtern(original);
+        }
+
+        private void Dispose(bool disposing) {
+            if (Interlocked.Exchange(ref _disposedValue, 1) == 0) {
+                // IF the object is owned, skip deleting it - something else will handle it.
+                if (_owner != null) {
+                    _owner = null;
+                    return;
+                }
+                wasm_extern_delete(_rawPointer);
+            }
+        }
+
+        ~WasmExtern() {
+            Dispose(disposing: false);
+        }
+
+        public void Dispose() {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
+    }
+    public sealed class WasmFunc : IWasmObject {
+        #region Memory management
+        internal IWasmObject? _owner;
+
+        private IntPtr _rawPointer;
+        private int _disposedValue;
+
+        private WasmFunc(IntPtr rawPointer) {
+            _rawPointer = rawPointer;
+        }
+
+        private WasmFunc(WasmFunc original) {
+            _rawPointer = wasm_func_copy(original._rawPointer);
+        }
+
+        internal WasmFunc() { }
+
+        internal static WasmFunc Wrap(IntPtr rawPointer) {
+            return new WasmFunc(rawPointer);
+        }
+
+        public static WasmFunc New(WasmFunc original) {
+            return new WasmFunc(original);
+        }
+
+        private void Dispose(bool disposing) {
+            if (Interlocked.Exchange(ref _disposedValue, 1) == 0) {
+                // IF the object is owned, skip deleting it - something else will handle it.
+                if (_owner != null) {
+                    _owner = null;
+                    return;
+                }
+                wasm_func_delete(_rawPointer);
+            }
+        }
+
+        ~WasmFunc() {
+            Dispose(disposing: false);
+        }
+
+        public void Dispose() {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 
-    public sealed class WasmExtern { }
-    public sealed class WasmFunc { }
-
     public sealed class WasmByteVec : IWasmObject {
+        #region Memory management
         private wasm_byte_vec_t _vec;
         private int _disposedValue;
 
@@ -76,9 +166,11 @@ namespace Wax {
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+        #endregion
     }
 
     public sealed class WasmExternVec : IWasmObject {
+        #region Memory management
         private wasm_extern_vec_t _vec;
         private int _disposedValue;
 
@@ -138,6 +230,7 @@ namespace Wax {
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+        #endregion
     }
 
     public sealed class WasmEngine : IWasmObject {

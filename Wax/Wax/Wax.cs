@@ -20,7 +20,7 @@ namespace Wax {
 
     public sealed class WasmByteVec : IWasmObject {
         private wasm_byte_vec_t _vec;
-        private int disposedValue;
+        private int _disposedValue;
 
         // USE EXTERNALLY AT YOUR OWN RISK
         public unsafe ref wasm_byte_vec_t RawVec => ref _vec;
@@ -62,7 +62,7 @@ namespace Wax {
         }
 
         private void Dispose(bool disposing) {
-            if (Interlocked.Exchange(ref disposedValue, 1) == 0) {
+            if (Interlocked.Exchange(ref _disposedValue, 1) == 0) {
                 Console.WriteLine("Disposing byte vec");
                 wasm_byte_vec_delete(ref _vec);
             }
@@ -80,7 +80,7 @@ namespace Wax {
 
     public sealed class WasmExternVec : IWasmObject {
         private wasm_extern_vec_t _vec;
-        private int disposedValue;
+        private int _disposedValue;
 
         // USE EXTERNALLY AT YOUR OWN RISK
         public unsafe ref wasm_extern_vec_t RawVec => ref _vec;
@@ -123,7 +123,7 @@ namespace Wax {
 
 #pragma warning disable IDE0060 // Remove unused parameter
         private void Dispose(bool disposing) {
-            if (Interlocked.Exchange(ref disposedValue, 1) == 0) {
+            if (Interlocked.Exchange(ref _disposedValue, 1) == 0) {
                 Console.WriteLine("Disposing extern vec");
                 wasm_extern_vec_delete(ref _vec);
             }

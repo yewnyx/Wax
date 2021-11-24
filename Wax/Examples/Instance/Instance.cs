@@ -26,8 +26,8 @@ namespace Wax.Examples {
   (export ""add_one"" (func $add_one_f)))
 ";
             var wat = WasmByteVec.New(Encoding.UTF8.GetBytes(wat_string));
-            var wasm_bytes = WasmByteVec.New();
-            
+            var wasm_bytes = WasmByteVec.NewEmpty();
+
             // TODO: port wat2wasm
             wat2wasm(ref wat.RawVec, ref wasm_bytes.RawVec);
 
@@ -44,7 +44,7 @@ namespace Wax.Examples {
             }
 
             Console.WriteLine("Creating imports...");
-            var imports = WasmExternVec.New();
+            var imports = WasmExternVec.NewEmpty();
 
             Console.WriteLine("Instantiating module...");
             var instance = WasmInstance.New(store, module, imports, out _);
@@ -56,23 +56,17 @@ namespace Wax.Examples {
 
             Console.WriteLine("Retrieving exports...");
             var exports = instance.Exports();
-            // TODO: hide RawVec
-            if (exports.RawVec.size == 0) {
+            if (exports.Length == 0) {
                 Console.Error.WriteLine("> Error accessing exports!");
                 print_wasmer_error();
                 Environment.Exit(1);
             }
 
-            IntPtr add_one_func;
-            unsafe {
-                var realptr = (IntPtr*)exports.RawVec.data;
-                // NOTE: YIKES
-                add_one_func = wasm_extern_as_func(*realptr);
-                if (add_one_func == IntPtr.Zero) {
-                    Console.Error.WriteLine("> Error accessing export!");
-                    print_wasmer_error();
-                    Environment.Exit(1);
-                }
+            var add_one_func = (WasmFunc)exports[0];
+            if (add_one_func == null) {
+                Console.Error.WriteLine("> Error accessing export!");
+                print_wasmer_error();
+                Environment.Exit(1);
             }
 
             Console.WriteLine("Calling `add_one` function...");
@@ -81,7 +75,7 @@ namespace Wax.Examples {
             wasm_val_vec_t args = WASM_ARRAY_VEC(args_val);
             wasm_val_vec_t results = WASM_ARRAY_VEC(results_val);
 
-            if (wasm_func_call(add_one_func, ref args, ref results) != IntPtr.Zero) {
+            if (add_one_func.Call(ref args, ref results) != IntPtr.Zero) {
                 Console.Error.WriteLine("> Error calling function!");
                 print_wasmer_error();
                 Environment.Exit(1);

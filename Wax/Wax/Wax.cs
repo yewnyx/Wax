@@ -138,10 +138,8 @@ namespace Wax {
         public int Length => (int)_vec.size;
         public WasmExtern this[int index] {
             get {
-                Span<IntPtr> span;
-                unsafe { span = new Span<IntPtr>((IntPtr*)_vec.data, (int)_vec.size); }
-                var item = span[index];
-                return WasmExtern.Wrap(this, item);
+                if (index >= (int)_vec.size) { return null; }
+                unsafe { return WasmExtern.Wrap(this, ((IntPtr*)_vec.data)[index]); }
             }
             // TODO: think about the right way to handle ownership here
             set { throw new NotImplementedException(); }

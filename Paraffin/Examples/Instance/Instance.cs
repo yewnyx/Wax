@@ -36,7 +36,7 @@ namespace Wax.Paraffin.Examples {
 
             Console.WriteLine("Compiling module...");
             var module = wasm_module_new(store, ref wasm_bytes);
-            if (module == null) {
+            if (module == IntPtr.Zero) {
                 Console.Error.WriteLine("> Error compiling module!");
                 print_wasmer_error();
                 Environment.Exit(1);
@@ -49,7 +49,7 @@ namespace Wax.Paraffin.Examples {
 
             Console.WriteLine("Instantiating module...");
             var instance = wasm_instance_new(store, module, ref imports, ref MemoryMarshal.GetReference(stackalloc IntPtr[1] { IntPtr.Zero}));
-            if (instance == null) {
+            if (instance == IntPtr.Zero) {
                 Console.Error.WriteLine("> Error instantiating module!");
                 print_wasmer_error();
                 Environment.Exit(1);

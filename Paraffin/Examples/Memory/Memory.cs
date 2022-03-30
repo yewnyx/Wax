@@ -12,7 +12,7 @@ namespace Wax.Paraffin.Examples {
             Span<byte> error_message = stackalloc byte[(int)error_len];
             wasmer_last_error_message(ref MemoryMarshal.GetReference(error_message), error_len);
             var error_str = Encoding.UTF8.GetString(error_message.ToArray());
-            Console.Error.WriteLine(error_str.ToString());
+            Console.Error.WriteLine(error_str);
         }
 
         public static void Main(string[] args) {
@@ -46,7 +46,7 @@ namespace Wax.Paraffin.Examples {
 
             Console.WriteLine("Compiling module...");
             var module = wasm_module_new(store, ref wasm_bytes);
-            if (module == null) {
+            if (module == IntPtr.Zero) {
                 Console.Error.WriteLine("> Error compiling module!");
                 print_wasmer_error();
                 Environment.Exit(1);
@@ -58,8 +58,8 @@ namespace Wax.Paraffin.Examples {
             wasm_extern_vec_t import_object = WASM_EMPTY_EXTERN_VEC();
 
             Console.WriteLine("Instantiating module...");
-            var instance = wasm_instance_new(store, module, ref import_object, IntPtr.Zero);
-            if (instance == null) {
+            var instance = wasm_instance_new(store, module, ref import_object, ref MemoryMarshal.GetReference(stackalloc IntPtr[1] { IntPtr.Zero}));
+            if (instance == IntPtr.Zero) {
                 Console.Error.WriteLine("> Error instantiating module!");
                 print_wasmer_error();
                 Environment.Exit(1);

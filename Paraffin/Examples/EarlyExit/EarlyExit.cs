@@ -13,7 +13,7 @@ namespace Wax.Paraffin.Examples {
             Span<byte> error_message = stackalloc byte[(int)error_len];
             wasmer_last_error_message(ref MemoryMarshal.GetReference(error_message), error_len);
             var error_str = Encoding.UTF8.GetString(error_message.ToArray());
-            Console.Error.WriteLine(error_str.ToString());
+            Console.Error.WriteLine(error_str);
         }
 
         static void print_frame(IntPtr frame) {
@@ -21,7 +21,7 @@ namespace Wax.Paraffin.Examples {
             var module_offset = wasm_frame_module_offset(frame);
             var func_index = wasm_frame_func_index(frame);
             var func_offset = wasm_frame_func_offset(frame);
-            Console.Error.WriteLine($"> {instance:X} @ 0x{module_offset:X} = {func_index}:{func_offset}");
+            Console.Error.WriteLine($"> {(long)instance:X} @ 0x{module_offset:X} = {func_index}:{func_offset}");
         }
 
         static IntPtr store;
@@ -57,7 +57,7 @@ namespace Wax.Paraffin.Examples {
 
             Console.WriteLine("Compiling module...");
             var module = wasm_module_new(store, ref binary);
-            if (module == null) {
+            if (module == IntPtr.Zero) {
                 Console.Error.WriteLine("> Error compiling module!");
                 print_wasmer_error();
                 Environment.Exit(1);
@@ -76,8 +76,8 @@ namespace Wax.Paraffin.Examples {
             //extern_vec_new_uninitialized(ref imports, 1);
             wasm_extern_vec_t imports = WASM_ARRAY_EXTERN_VEC(stackalloc IntPtr[1] { wasm_func_as_extern(host_func) });
 
-            var instance = wasm_instance_new(store, module, ref imports, IntPtr.Zero);
-            if (instance == null) {
+            var instance = wasm_instance_new(store, module, ref imports, ref MemoryMarshal.GetReference(stackalloc IntPtr[1] { IntPtr.Zero}));
+            if (instance == IntPtr.Zero) {
                 Console.Error.WriteLine("> Error instantiating module!");
                 print_wasmer_error();
                 Environment.Exit(1);

@@ -1,0 +1,16 @@
+{
+  "name": "xyz.yewnyx.wax.paraffin",
+  "version": "0.0.1",
+  "displayName": "Wax Paraffin",
+  "description": "WebAssembly+CSharp bindings (WA+CS = Wax)",
+  "unity": "2021.2",
+  "keywords": [
+    "webassembly"
+  ],
+  "author": {
+    "name": "Yewnyx",
+    "email": "yewnyx@yewnyx.xyz"
+  },
+  "unityRelease": "16f1",
+  "hideInEditor": false
+}
